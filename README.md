@@ -28,11 +28,11 @@ import Global from "./components/context/Global";
 import { Toaster } from "react-hot-toast";
 ```
 
-```sh
+```jsx
 <Global>
-    <App />
-    <Toaster position="top-center" reverseOrder={false} />
-  </Global>
+  <App />
+  <Toaster position="top-center" reverseOrder={false} />
+</Global>
 ```
 
 ```jsx
