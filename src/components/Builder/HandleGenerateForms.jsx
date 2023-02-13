@@ -120,7 +120,6 @@ function HandleGenerateForms({ shemaObject, level, lng, changeValue }) {
                 ></SelectContributor>
               );
             } else {
-              console.log(value);
               data.push(
                 <ModalTemplate
                   key={key}
