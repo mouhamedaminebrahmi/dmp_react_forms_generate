@@ -38,6 +38,7 @@ function HandleGenerateForms({ shemaObject, level, lng, changeValue }) {
             <SelectSingleList
               label={label}
               name={key}
+              key={key}
               arrayList={registerList}
               changeValue={changeValue}
               tooltip={tooltip}
@@ -78,6 +79,7 @@ function HandleGenerateForms({ shemaObject, level, lng, changeValue }) {
               <SelectWithCreate
                 label={label}
                 name={key}
+                key={key}
                 arrayList={registerList}
                 changeValue={changeValue}
                 template={value.items.template_name}
@@ -91,6 +93,7 @@ function HandleGenerateForms({ shemaObject, level, lng, changeValue }) {
               <SelectMultipleList
                 label={label}
                 name={key}
+                key={key}
                 arrayList={registerList}
                 changeValue={changeValue}
                 tooltip={tooltip}
@@ -107,6 +110,7 @@ function HandleGenerateForms({ shemaObject, level, lng, changeValue }) {
                 <SelectContributor
                   label={label}
                   name={key}
+                  key={key}
                   arrayList={listContributor}
                   changeValue={changeValue}
                   template={"PersonStandard"}
@@ -116,13 +120,21 @@ function HandleGenerateForms({ shemaObject, level, lng, changeValue }) {
                 ></SelectContributor>
               );
             } else {
+              console.log(value);
               data.push(
-                <ModalTemplate tooltip={tooltip} value={value} template={value.items.template_name} keyValue={key} level={level}></ModalTemplate>
+                <ModalTemplate
+                  key={key}
+                  tooltip={tooltip}
+                  value={value}
+                  template={value.items.template_name}
+                  keyValue={key}
+                  level={level}
+                ></ModalTemplate>
               );
             }
           }
           if (value.items.type === "string") {
-            data.push(<InputTextDynamicaly label={label} name={key} tooltip={tooltip}></InputTextDynamicaly>);
+            data.push(<InputTextDynamicaly key={key} label={label} name={key} tooltip={tooltip}></InputTextDynamicaly>);
           }
         }
 
@@ -139,7 +151,15 @@ function HandleGenerateForms({ shemaObject, level, lng, changeValue }) {
           //console.log(" Sous fragment unique (sous formulaire)");
           if (value.inputType === "pickOrCreate") {
             data.push(
-              <ModalTemplate tooltip={tooltip} value={value} lng={lng} template={value.template_name} keyValue={key} level={level}></ModalTemplate>
+              <ModalTemplate
+                key={key}
+                tooltip={tooltip}
+                value={value}
+                lng={lng}
+                template={value.template_name}
+                keyValue={key}
+                level={level}
+              ></ModalTemplate>
             );
           }
         }

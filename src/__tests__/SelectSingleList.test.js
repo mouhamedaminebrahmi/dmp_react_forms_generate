@@ -15,13 +15,16 @@ let shemaObject = {
   type: "object",
   class: "DataStorageStandard",
   properties: {
-    estimatedVolume: {
-      type: "number",
-      description: "Volume estimé des données",
-      "label@fr_FR": "Volume estimé des données",
-      "label@en_GB": "Estimated volume of data",
-      "form_label@fr_FR": "Volume estimé des données",
-      "form_label@en_GB": "Estimated volume of data",
+    volumeUnit: {
+      type: "string",
+      description: "Unité de volume",
+      inputType: "dropdown",
+      "label@fr_FR": "Unité",
+      "label@en_GB": "Unit",
+      registry_name: "VolumeUnit",
+      overridable: true,
+      "form_label@fr_FR": "Unité",
+      "form_label@en_GB": "Unit",
     },
   },
   required: ["description"],
@@ -38,8 +41,7 @@ describe("HandleGenerateForms component", () => {
         <HandleGenerateForms shemaObject={shemaObject} level={level} lng={lng} changeValue={changeValue} />
       </Global>
     );
-
-    expect(wrapper.find("InputText").prop("label")).toBe("Volume estimé des données");
-    expect(wrapper.find("InputText").prop("name")).toBe("estimatedVolume");
+    expect(wrapper.find("SelectSingleList").prop("label")).toBe("Unité");
+    expect(wrapper.find("SelectSingleList").prop("name")).toBe("volumeUnit");
   });
 });
