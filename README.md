@@ -1,70 +1,128 @@
-# Getting Started with Create React App
+# Dynamic form generation
+
+# Getting Started with dynamic form generation
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## steps
 
-In the project directory, you can run:
+- Copy the content of src file
+- Copy the app.js
+- Add this css to app.css
 
-### `npm start`
+```sh
+.outline-red {
+  outline: 1px solid #dc3545;
+}
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Add this to index.js
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```sh
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import Global from "./components/context/Global";
+import { Toaster } from "react-hot-toast";
+```
 
-### `npm test`
+```sh
+<Global>
+    <App />
+    <Toaster position="top-center" reverseOrder={false} />
+  </Global>
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```jsx
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import Global from "./components/context/Global";
+import { Toaster } from "react-hot-toast";
+```
 
-### `npm run build`
+- Add fontAwesome to index.html
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```sh
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Delete app.test.js
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Tech
 
-### `npm run eject`
+dynamic form generation uses a number of open source projects to work properly:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- [react-bootstrap](https://react-bootstrap.github.io/) - React-Bootstrap replaces the Bootstrap JavaScript. Each component has been built from scratch as a true React component, without unneeded dependencies like jQuery!
+- [dompurify](https://github.com/cure53/DOMPurify) - DOMPurify is a DOM-only, super-fast, uber-tolerant XSS sanitizer for HTML, MathML and SVG.
+- [draft-js](https://github.com/facebookarchive/draft-js) - Draft.js is a JavaScript rich text editor framework, built for React and backed by an immutable model. Extensible and Customizable.
+- [react-hot-toast](https://react-hot-toast.com/) - Add beautiful notifications to your React app with react-hot-toast. Lightweight. Smoking hot by default.
+- [react-select](https://react-select.com/home) - A flexible and beautiful Select Input control for ReactJS with multiselect, autocomplete, async and creatable support.
+- [sweetalert](https://sweetalert2.github.io/) - A BEAUTIFUL, RESPONSIVE, CUSTOMIZABLE, ACCESSIBLE (WAI-ARIA) REPLACEMENT FOR JAVASCRIPT'S POPUP BOXES
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Installation
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Dynamic form generation requires [Node.js](https://nodejs.org/) v10+ to run.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Install the dependencies .
 
-## Learn More
+```sh
+npm i react-select draft-js react-draft-wysiwyg draftjs-to-html html-to-draftjs
+npm i react-bootstrap bootstrap dompurify
+npm i react-hot-toast sweetalert
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+For developement testing environment...
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```sh
+npm install --save-dev @testing-library/react @testing-library/jest-dom react-test-renderer
+npm install --save-dev enzyme @cfaester/enzyme-adapter-react-18
+```
 
-### Code Splitting
+> Note: `Reactjs < 18` is required to install a enzyme adapter for every react js version.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```sh
+npm install --save-dev npm i enzyme-adapter-react-16
+```
 
-### Analyzing the Bundle Size
+## Development
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+By default, the react js app will expose port 3000.
 
-### Making a Progressive Web App
+Open your favorite Terminal and run these commands.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Run project:
 
-### Advanced Configuration
+```sh
+npm start
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Generating built files for distribution:
 
-### Deployment
+```sh
+npm run build
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+(optional) run project with build files:
 
-### `npm run build` fails to minify
+```sh
+npx serve -s build
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+#### Unit test
+
+For developement:
+
+```sh
+npm run test
+```
+
+## License
+
+MIT
+
+**Free Software, Hell Yeah!**
