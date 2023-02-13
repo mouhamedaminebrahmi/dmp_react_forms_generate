@@ -6,7 +6,7 @@ import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 import { GlobalContext } from "../context/Global";
 
-function TextArea({ label, placeholder, name, changeValue, tooltip }) {
+function TextArea({ label, name, changeValue, tooltip }) {
   const { temp } = useContext(GlobalContext);
   /* Setting the initial state of the editor. */
   useEffect(() => {
@@ -48,7 +48,6 @@ function TextArea({ label, placeholder, name, changeValue, tooltip }) {
             toolbarClassName="toolbarClassName"
             wrapperClassName="wrapperClassName"
             editorClassName="editorClassName"
-            placeholder={placeholder}
             name={name}
             onEditorStateChange={onEditorStateChange}
             // toolbar={{

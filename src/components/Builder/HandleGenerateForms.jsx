@@ -27,18 +27,7 @@ function HandleGenerateForms({ shemaObject, level, lng, changeValue }) {
         // si inputType === textarea
 
         if (value.inputType === "textarea") {
-          data.push(
-            <TextArea
-              key={key}
-              label={label}
-              placeholder={""}
-              isSmall={false}
-              smallText={""}
-              name={key}
-              changeValue={changeValue}
-              tooltip={tooltip}
-            ></TextArea>
-          );
+          data.push(<TextArea key={key} label={label} name={key} changeValue={changeValue} tooltip={tooltip}></TextArea>);
           //sethtmlGenerator(data);
         }
         // Condition 1.2
@@ -51,8 +40,6 @@ function HandleGenerateForms({ shemaObject, level, lng, changeValue }) {
               name={key}
               arrayList={registerList}
               changeValue={changeValue}
-              withList={false}
-              withAdd={false}
               tooltip={tooltip}
               level={level}
             ></SelectSingleList>
@@ -106,8 +93,6 @@ function HandleGenerateForms({ shemaObject, level, lng, changeValue }) {
                 name={key}
                 arrayList={registerList}
                 changeValue={changeValue}
-                withList={true}
-                isArray={true}
                 tooltip={tooltip}
                 level={level}
               ></SelectMultipleList>
@@ -137,9 +122,7 @@ function HandleGenerateForms({ shemaObject, level, lng, changeValue }) {
             }
           }
           if (value.items.type === "string") {
-            data.push(
-              <InputTextDynamicaly label={label} placeholder={""} isSmall={false} smallText={""} name={key} tooltip={tooltip}></InputTextDynamicaly>
-            );
+            data.push(<InputTextDynamicaly label={label} name={key} tooltip={tooltip}></InputTextDynamicaly>);
           }
         }
 
@@ -171,8 +154,6 @@ function HandleGenerateForms({ shemaObject, level, lng, changeValue }) {
                 name={key}
                 arrayList={registerList}
                 changeValue={changeValue}
-                withList={false}
-                withAdd={false}
                 tooltip={tooltip}
                 level={level}
               ></SelectSingleList>

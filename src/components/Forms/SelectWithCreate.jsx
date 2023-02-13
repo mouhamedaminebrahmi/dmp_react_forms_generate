@@ -7,33 +7,16 @@ import { Button } from "react-bootstrap";
 import { GlobalContext } from "../context/Global";
 import swal from "sweetalert";
 import toast from "react-hot-toast";
-import { getTemplate } from "../../services/DmpServiceApi";
 
 function SelectWithCreate({ label, arrayList, name, changeValue, template, keyValue, level, tooltip }) {
   const [list, setlist] = useState([]);
+  let registerFile = require(`../../data/templates/${template}-template.json`);
+
   const [show, setShow] = useState(false);
   const [options, setoptions] = useState(null);
   const [selectObject, setselectObject] = useState([]);
   const { form, setform, temp, settemp, lng } = useContext(GlobalContext);
   const [index, setindex] = useState(null);
-  const [newTemplate, setnewTemplate] = useState(null);
-
-  useEffect(() => {
-    getTemplate(template).then((el) => {
-      setnewTemplate(el);
-      if (form[keyValue]) {
-        const patern = el.to_string;
-        //si le patern n'est pas vide
-        if (patern.length > 0) {
-          let listParsed = [];
-          form[keyValue].map((element) => {
-            listParsed.push(parsePatern(element, patern));
-          });
-          setlist(listParsed);
-        }
-      }
-    });
-  }, [template]);
 
   /**
    * It closes the modal and resets the state of the modal.
@@ -51,6 +34,21 @@ function SelectWithCreate({ label, arrayList, name, changeValue, template, keyVa
     setShow(isOpen);
   };
 
+  /* It's a useEffect hook that is called when the component is mounted. It is used to set the options of the select list. */
+  useEffect(() => {
+    if (form[keyValue]) {
+      const patern = registerFile.to_string;
+      //si le patern n'est pas vide
+      if (patern.length > 0) {
+        let listParsed = [];
+        form[keyValue].map((el) => {
+          listParsed.push(parsePatern(el, patern));
+        });
+        setlist(listParsed);
+      }
+    }
+  }, []);
+
   /* A hook that is called when the component is mounted. It is used to set the options of the select list. */
   useEffect(() => {
     const options = arrayList.map((option) => ({
@@ -66,7 +64,7 @@ function SelectWithCreate({ label, arrayList, name, changeValue, template, keyVa
    * @param e - the event object
    */
   const handleChangeList = (e) => {
-    const patern = newTemplate.to_string;
+    const patern = registerFile.to_string;
     const parsedPatern = patern.length > 0 ? parsePatern(e.object, patern) : null;
     const updatedList = patern.length > 0 ? [...list, parsedPatern] : [...list, e.value];
     setlist(updatedList);
@@ -110,16 +108,16 @@ function SelectWithCreate({ label, arrayList, name, changeValue, template, keyVa
       return;
     }
 
-    const checkForm = checkRequiredForm(newTemplate, temp);
+    const checkForm = checkRequiredForm(registerFile, temp);
     if (checkForm) {
-      toast.error("Veuiller remplire le champs " + getLabelName(checkForm, newTemplate));
+      toast.error("Veuiller remplire le champs " + getLabelName(checkForm, registerFile));
     } else {
       if (index !== null) {
         const deleteIndex = deleteByIndex(form[keyValue], index);
         const concatedObject = [...deleteIndex, temp];
         setform({ ...form, [keyValue]: concatedObject });
         const newList = deleteByIndex([...list], index);
-        const parsedPatern = parsePatern(temp, newTemplate.to_string);
+        const parsedPatern = parsePatern(temp, registerFile.to_string);
         const copieList = [...newList, parsedPatern];
         setlist(copieList);
         settemp(null);
@@ -137,7 +135,7 @@ function SelectWithCreate({ label, arrayList, name, changeValue, template, keyVa
   const handleSave = () => {
     let newObject = form[keyValue] ? [...form[keyValue], temp] : [temp];
     setform({ ...form, [keyValue]: newObject });
-    setlist([...list, parsePatern(temp, newTemplate.to_string)]);
+    setlist([...list, parsePatern(temp, registerFile.to_string)]);
     handleClose();
     settemp(null);
   };
@@ -197,21 +195,19 @@ function SelectWithCreate({ label, arrayList, name, changeValue, template, keyVa
         </div>
       </div>
       <>
-        {newTemplate && (
-          <Modal show={show} onHide={handleClose}>
-            <Modal.Body>
-              <BuilderForm shemaObject={newTemplate} level={level + 1}></BuilderForm>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleClose}>
-                Fermer
-              </Button>
-              <Button variant="primary" onClick={handleAddToList}>
-                Enregistrer
-              </Button>
-            </Modal.Footer>
-          </Modal>
-        )}
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Body>
+            <BuilderForm shemaObject={registerFile} level={level + 1}></BuilderForm>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Fermer
+            </Button>
+            <Button variant="primary" onClick={handleAddToList}>
+              Enregistrer
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </>
     </>
   );

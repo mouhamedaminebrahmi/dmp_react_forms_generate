@@ -4,7 +4,7 @@ import { GlobalContext } from "../context/Global";
 /* A React component that renders a form with a text input and a button. 
 When the button is clicked, a new text input is added to the form. When the text
 input is changed, the form is updated. */
-function InputTextDynamicaly({ label, placeholder, name, tooltip }) {
+function InputTextDynamicaly({ label, name, tooltip }) {
   const [formFields, setFormFields] = useState([""]);
   const { form, setform } = useContext(GlobalContext);
 
@@ -51,13 +51,7 @@ function InputTextDynamicaly({ label, placeholder, name, tooltip }) {
           <div key={index}>
             <div className="row">
               <div className="col-9 mt-2">
-                <input
-                  className="form-control"
-                  name={name}
-                  placeholder={placeholder}
-                  onChange={(event) => handleFormChange(event, index)}
-                  value={form.name}
-                />
+                <input className="form-control" name={name} onChange={(event) => handleFormChange(event, index)} value={form.name} />
               </div>
               <div className="col-3">
                 <button type="button" className="btn btn-primary px-3 m-2" onClick={addFields}>

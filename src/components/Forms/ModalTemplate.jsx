@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import BuilderForm from "../Builder/BuilderForm";
 import { GlobalContext } from "../context/Global";
@@ -6,7 +6,6 @@ import Button from "react-bootstrap/Button";
 import { checkRequiredForm, createMarkup, deleteByIndex, getLabelName, parsePatern } from "../../utils/GeneratorUtils";
 import swal from "sweetalert";
 import toast from "react-hot-toast";
-import { getTemplate } from "../../services/DmpServiceApi";
 
 /**
  * It takes a template name as an argument, loads the template file, and then renders a modal with the template file as a prop.
@@ -14,16 +13,10 @@ import { getTemplate } from "../../services/DmpServiceApi";
  * @returns A React component.
  */
 function ModalTemplate({ value, template, keyValue, level, tooltip }) {
+  let registerFile = require(`../../data/templates/${template}-template.json`);
   const [show, setShow] = useState(false);
   const { form, setform, temp, settemp, lng } = useContext(GlobalContext);
   const [index, setindex] = useState(null);
-  const [newTemplate, setnewTemplate] = useState(null);
-
-  useEffect(() => {
-    getTemplate(template).then((el) => {
-      setnewTemplate(el);
-    });
-  }, [template]);
 
   /**
    * The function sets the show state to false
@@ -40,8 +33,8 @@ function ModalTemplate({ value, template, keyValue, level, tooltip }) {
   const handleAddToList = () => {
     if (!temp) return handleClose();
 
-    const checkForm = checkRequiredForm(newTemplate, temp);
-    if (checkForm) return toast.error(`Veuiller remplire le champs ${getLabelName(checkForm, newTemplate)}`);
+    const checkForm = checkRequiredForm(registerFile, temp);
+    if (checkForm) return toast.error(`Veuiller remplire le champs ${getLabelName(checkForm, registerFile)}`);
 
     if (index !== null) {
       const deleteIndex = deleteByIndex(form[keyValue], index);
@@ -118,11 +111,10 @@ function ModalTemplate({ value, template, keyValue, level, tooltip }) {
         )}
         <div style={{ margin: "20px 90px 20px 20px" }}>
           {form[keyValue] &&
-            newTemplate &&
             form[keyValue].map((el, idx) => (
               <div key={idx} className="row border">
                 <div className="col-10">
-                  <div className="preview" dangerouslySetInnerHTML={createMarkup(parsePatern(el, newTemplate.to_string))}></div>
+                  <div className="preview" dangerouslySetInnerHTML={createMarkup(parsePatern(el, registerFile.to_string))}></div>
                 </div>
                 <div className="col-1">
                   {level === 1 && <i className="fa fa-edit m-3 text-primary" aria-hidden="true" onClick={() => handleEdit(idx)}></i>}
@@ -140,7 +132,7 @@ function ModalTemplate({ value, template, keyValue, level, tooltip }) {
       </div>
       <Modal show={show} onHide={handleClose}>
         <Modal.Body>
-          <BuilderForm shemaObject={newTemplate} level={level + 1}></BuilderForm>
+          <BuilderForm shemaObject={registerFile} level={level + 1}></BuilderForm>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>

@@ -73,7 +73,7 @@ Install the dependencies .
 ```sh
 npm i react-select draft-js react-draft-wysiwyg draftjs-to-html html-to-draftjs
 npm i react-bootstrap bootstrap dompurify
-npm i react-hot-toast sweetalert axios
+npm i react-hot-toast sweetalert
 ```
 
 For developement testing environment...
