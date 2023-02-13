@@ -7,18 +7,33 @@ import { Button } from "react-bootstrap";
 import { GlobalContext } from "../context/Global";
 import swal from "sweetalert";
 import toast from "react-hot-toast";
+import { getTemplate } from "../../services/DmpServiceApi";
 
-function SelectWithCreate({ label, arrayList, name, changeValue, withList, withAdd, template, keyValue, level, tooltip }) {
+function SelectWithCreate({ label, arrayList, name, changeValue, template, keyValue, level, tooltip }) {
   const [list, setlist] = useState([]);
-  let registerFile = null;
-  if (withAdd) {
-    registerFile = require(`../../data/templates/${template}-template.json`);
-  }
   const [show, setShow] = useState(false);
   const [options, setoptions] = useState(null);
   const [selectObject, setselectObject] = useState([]);
   const { form, setform, temp, settemp, lng } = useContext(GlobalContext);
   const [index, setindex] = useState(null);
+  const [newTemplate, setnewTemplate] = useState(null);
+
+  useEffect(() => {
+    getTemplate(template).then((el) => {
+      setnewTemplate(el);
+      if (form[keyValue]) {
+        const patern = el.to_string;
+        //si le patern n'est pas vide
+        if (patern.length > 0) {
+          let listParsed = [];
+          form[keyValue].map((element) => {
+            listParsed.push(parsePatern(element, patern));
+          });
+          setlist(listParsed);
+        }
+      }
+    });
+  }, [template]);
 
   /**
    * It closes the modal and resets the state of the modal.
@@ -36,23 +51,6 @@ function SelectWithCreate({ label, arrayList, name, changeValue, withList, withA
     setShow(isOpen);
   };
 
-  /* It's a useEffect hook that is called when the component is mounted. It is used to set the options of the select list. */
-  useEffect(() => {
-    if (form[keyValue]) {
-      if (withAdd) {
-        const patern = registerFile.to_string;
-        //si le patern n'est pas vide
-        if (patern.length > 0) {
-          let listParsed = [];
-          form[keyValue].map((el) => {
-            listParsed.push(parsePatern(el, patern));
-          });
-          setlist(listParsed);
-        }
-      }
-    }
-  }, []);
-
   /* A hook that is called when the component is mounted. It is used to set the options of the select list. */
   useEffect(() => {
     const options = arrayList.map((option) => ({
@@ -68,7 +66,7 @@ function SelectWithCreate({ label, arrayList, name, changeValue, withList, withA
    * @param e - the event object
    */
   const handleChangeList = (e) => {
-    const patern = registerFile.to_string;
+    const patern = newTemplate.to_string;
     const parsedPatern = patern.length > 0 ? parsePatern(e.object, patern) : null;
     const updatedList = patern.length > 0 ? [...list, parsedPatern] : [...list, e.value];
     setlist(updatedList);
@@ -112,16 +110,16 @@ function SelectWithCreate({ label, arrayList, name, changeValue, withList, withA
       return;
     }
 
-    const checkForm = checkRequiredForm(registerFile, temp);
+    const checkForm = checkRequiredForm(newTemplate, temp);
     if (checkForm) {
-      toast.error("Veuiller remplire le champs " + getLabelName(checkForm, registerFile));
+      toast.error("Veuiller remplire le champs " + getLabelName(checkForm, newTemplate));
     } else {
       if (index !== null) {
         const deleteIndex = deleteByIndex(form[keyValue], index);
         const concatedObject = [...deleteIndex, temp];
         setform({ ...form, [keyValue]: concatedObject });
         const newList = deleteByIndex([...list], index);
-        const parsedPatern = parsePatern(temp, registerFile.to_string);
+        const parsedPatern = parsePatern(temp, newTemplate.to_string);
         const copieList = [...newList, parsedPatern];
         setlist(copieList);
         settemp(null);
@@ -139,7 +137,7 @@ function SelectWithCreate({ label, arrayList, name, changeValue, withList, withA
   const handleSave = () => {
     let newObject = form[keyValue] ? [...form[keyValue], temp] : [temp];
     setform({ ...form, [keyValue]: newObject });
-    setlist([...list, parsePatern(temp, registerFile.to_string)]);
+    setlist([...list, parsePatern(temp, newTemplate.to_string)]);
     handleClose();
     settemp(null);
   };
@@ -176,41 +174,44 @@ function SelectWithCreate({ label, arrayList, name, changeValue, withList, withA
               }}
             />
           </div>
-          <div className="col-2">{withAdd && <i className="fas fa-plus-square text-primary mt-3" onClick={handleShow}></i>}</div>
-        </div>
-        {withList && (
-          <div style={{ margin: "20px 90px 20px 20px" }}>
-            {list &&
-              list.map((el, idx) => (
-                <div key={idx} className="row border">
-                  <div className="col-10">
-                    <p className="border m-2"> {list[idx]} </p>
-                  </div>
-                  <div className="col-1">
-                    {level === 1 && <i className="fa fa-edit m-3 text-primary" aria-hidden="true" onClick={() => handleEdit(idx)}></i>}
-                  </div>
-                  <div className="col-1">
-                    <i className="fa fa-close m-3  text-danger" aria-hidden="true" onClick={() => handleDeleteListe(idx)}></i>
-                  </div>
-                </div>
-              ))}
+          <div className="col-2">
+            <i className="fas fa-plus-square text-primary mt-3" onClick={handleShow}></i>
           </div>
-        )}
+        </div>
+
+        <div style={{ margin: "20px 90px 20px 20px" }}>
+          {list &&
+            list.map((el, idx) => (
+              <div key={idx} className="row border">
+                <div className="col-10">
+                  <p className="border m-2"> {list[idx]} </p>
+                </div>
+                <div className="col-1">
+                  {level === 1 && <i className="fa fa-edit m-3 text-primary" aria-hidden="true" onClick={() => handleEdit(idx)}></i>}
+                </div>
+                <div className="col-1">
+                  <i className="fa fa-close m-3  text-danger" aria-hidden="true" onClick={() => handleDeleteListe(idx)}></i>
+                </div>
+              </div>
+            ))}
+        </div>
       </div>
       <>
-        <Modal show={show} onHide={handleClose}>
-          <Modal.Body>
-            <BuilderForm shemaObject={registerFile} level={level + 1}></BuilderForm>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              Fermer
-            </Button>
-            <Button variant="primary" onClick={handleAddToList}>
-              Enregistrer
-            </Button>
-          </Modal.Footer>
-        </Modal>
+        {newTemplate && (
+          <Modal show={show} onHide={handleClose}>
+            <Modal.Body>
+              <BuilderForm shemaObject={newTemplate} level={level + 1}></BuilderForm>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>
+                Fermer
+              </Button>
+              <Button variant="primary" onClick={handleAddToList}>
+                Enregistrer
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        )}
       </>
     </>
   );

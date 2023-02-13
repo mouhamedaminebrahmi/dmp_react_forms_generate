@@ -8,19 +8,35 @@ import { Button } from "react-bootstrap";
 import { GlobalContext } from "../context/Global";
 import swal from "sweetalert";
 import toast from "react-hot-toast";
+import { getTemplate } from "../../services/DmpServiceApi";
 
-function SelectContributor({ label, arrayList, name, changeValue, withList, withAdd, template, keyValue, level, tooltip }) {
+function SelectContributor({ label, arrayList, name, changeValue, template, keyValue, level, tooltip }) {
   const [list, setlist] = useState([]);
-  let registerFile = null;
-  if (withAdd) {
-    registerFile = require(`../../data/templates/${template}-template.json`);
-  }
 
   const [show, setShow] = useState(false);
   const [options, setoptions] = useState(null);
   const [selectObject, setselectObject] = useState([]);
   const { form, setform, temp, settemp } = useContext(GlobalContext);
   const [index, setindex] = useState(null);
+  const [newTemplate, setnewTemplate] = useState(null);
+
+  useEffect(
+    () => {
+      getTemplate(template).then((el) => {
+        setnewTemplate(el);
+        if (!form[keyValue]) {
+          return;
+        }
+        const patern = el.to_string;
+        if (!patern.length) {
+          return;
+        }
+        setlist(form[keyValue].map((el) => parsePatern(el.person, patern)));
+      });
+    },
+    [template],
+    form[keyValue]
+  );
 
   /**
    * It closes the modal and resets the state of the modal.
@@ -38,18 +54,6 @@ function SelectContributor({ label, arrayList, name, changeValue, withList, with
     setShow(isOpen);
   };
 
-  /* It's a useEffect hook that is called when the component is mounted. It is used to set the options of the select list. */
-  useEffect(() => {
-    if (!form[keyValue] || !withAdd) {
-      return;
-    }
-    const patern = registerFile.to_string;
-    if (!patern.length) {
-      return;
-    }
-    setlist(form[keyValue].map((el) => parsePatern(el.person, patern)));
-  }, [form[keyValue], withAdd, registerFile]);
-
   /* A hook that is called when the component is mounted. It is used to set the options of the select list. */
   useEffect(() => {
     const options = arrayList.map((option) => ({
@@ -65,12 +69,12 @@ function SelectContributor({ label, arrayList, name, changeValue, withList, with
    * @param e - the event object
    */
   const handleChangeList = (e) => {
-    const patern = registerFile.to_string;
+    const patern = newTemplate.to_string;
     const { object, value } = e;
 
     if (patern.length > 0) {
       setselectObject([...selectObject, object]);
-      const parsedPatern = parsePatern(object, registerFile.to_string);
+      const parsedPatern = parsePatern(object, newTemplate.to_string);
       setlist([...list, parsedPatern]);
       changeValue({ target: { name, value: [...selectObject, object] } });
 
@@ -115,7 +119,7 @@ function SelectContributor({ label, arrayList, name, changeValue, withList, with
     if (index !== null) {
       const objectPerson = { person: temp, role: "from create" };
       setform({ ...form, [keyValue]: [...deleteByIndex(form[keyValue], index), objectPerson] });
-      const parsedPatern = parsePatern(temp, registerFile.to_string);
+      const parsedPatern = parsePatern(temp, newTemplate.to_string);
       setlist([...deleteByIndex([...list], index), parsedPatern]);
     } else {
       handleSave();
@@ -132,7 +136,7 @@ function SelectContributor({ label, arrayList, name, changeValue, withList, with
   const handleSave = () => {
     const objectPerson = { person: temp, role: "from create" };
     setform({ ...form, [keyValue]: [...(form[keyValue] || []), objectPerson] });
-    const parsedPatern = parsePatern(temp, registerFile.to_string);
+    const parsedPatern = parsePatern(temp, newTemplate.to_string);
     setlist([...list, parsedPatern]);
     handleClose();
     settemp(null);
@@ -170,41 +174,45 @@ function SelectContributor({ label, arrayList, name, changeValue, withList, with
               }}
             />
           </div>
-          <div className="col-2">{withAdd && <i className="fas fa-plus-square text-primary mt-2" onClick={handleShow}></i>}</div>
-        </div>
-        {withList && (
-          <div style={{ margin: "20px 90px 20px 20px" }}>
-            {list &&
-              list.map((el, idx) => (
-                <div key={idx} className="row border">
-                  <div className="col-10">
-                    <p className="border m-2"> {list[idx]} </p>
-                  </div>
-                  <div className="col-1">
-                    {level === 1 && <i className="fa fa-edit m-3 text-primary" aria-hidden="true" onClick={() => handleEdit(idx)}></i>}
-                  </div>
-                  <div className="col-1">
-                    <i className="fa fa-close m-3  text-danger" aria-hidden="true" onClick={() => handleDeleteListe(idx)}></i>
-                  </div>
-                </div>
-              ))}
+          <div className="col-2">
+            {" "}
+            <i className="fas fa-plus-square text-primary mt-2" onClick={handleShow}></i>
           </div>
-        )}
+        </div>
+
+        <div style={{ margin: "20px 90px 20px 20px" }}>
+          {list &&
+            list.map((el, idx) => (
+              <div key={idx} className="row border">
+                <div className="col-10">
+                  <p className="border m-2"> {list[idx]} </p>
+                </div>
+                <div className="col-1">
+                  {level === 1 && <i className="fa fa-edit m-3 text-primary" aria-hidden="true" onClick={() => handleEdit(idx)}></i>}
+                </div>
+                <div className="col-1">
+                  <i className="fa fa-close m-3  text-danger" aria-hidden="true" onClick={() => handleDeleteListe(idx)}></i>
+                </div>
+              </div>
+            ))}
+        </div>
       </div>
       <>
-        <Modal show={show} onHide={handleClose}>
-          <Modal.Body>
-            <BuilderForm shemaObject={registerFile} level={level + 1}></BuilderForm>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              Fermer
-            </Button>
-            <Button variant="primary" onClick={handleAddToList}>
-              Enregistrer
-            </Button>
-          </Modal.Footer>
-        </Modal>
+        {newTemplate && (
+          <Modal show={show} onHide={handleClose}>
+            <Modal.Body>
+              <BuilderForm shemaObject={newTemplate} level={level + 1}></BuilderForm>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>
+                Fermer
+              </Button>
+              <Button variant="primary" onClick={handleAddToList}>
+                Enregistrer
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        )}
       </>
     </>
   );

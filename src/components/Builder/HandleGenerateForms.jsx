@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { getRegistryList } from "../../utils/GeneratorUtils";
 import TextArea from "../Forms/TextArea";
 import InputText from "../Forms/InputText";
@@ -93,8 +93,6 @@ function HandleGenerateForms({ shemaObject, level, lng, changeValue }) {
                 name={key}
                 arrayList={registerList}
                 changeValue={changeValue}
-                withList={true}
-                withAdd={true}
                 template={value.items.template_name}
                 level={level}
                 keyValue={key}
@@ -126,8 +124,6 @@ function HandleGenerateForms({ shemaObject, level, lng, changeValue }) {
                   name={key}
                   arrayList={listContributor}
                   changeValue={changeValue}
-                  withList={true}
-                  withAdd={true}
                   template={"PersonStandard"}
                   keyValue={key}
                   level={level}
