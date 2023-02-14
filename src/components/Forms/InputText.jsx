@@ -37,14 +37,11 @@ function InputText({ label, type, placeholder, name, changeValue, tooltip, hidde
     <div className="form-group">
       <label>{label}</label>
       {tooltip && (
-        <span className="m-4" data-toggle="tooltip" data-placement="top" title={tooltip}>
+        <span className="" data-toggle="tooltip" data-placement="top" title={tooltip}>
           ?
         </span>
       )}
-
       <input
-        // required={checkRequired(requiredList, name)}
-        // pattern={checkPatern(type)}
         type={type}
         value={isConst === false ? (temp ? temp[name] : text == null ? "" : text) : isConst}
         className={isRequired ? "form-control outline-red" : "form-control"}

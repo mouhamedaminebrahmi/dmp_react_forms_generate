@@ -2,22 +2,45 @@ import React, { useContext, useEffect, useState } from "react";
 import Select from "react-select";
 import { GlobalContext } from "../context/Global";
 import swal from "sweetalert";
+import { getRegistry, getRegistryValue } from "../../services/DmpServiceApi";
 
-function SelectMultipleList({ label, arrayList, name, changeValue, tooltip }) {
+function SelectMultipleList({ label, registry, name, changeValue, tooltip }) {
   const [list, setlist] = useState([]);
   const [options, setoptions] = useState(null);
-
   const { temp, settemp, lng } = useContext(GlobalContext);
 
   /* A hook that is called when the component is mounted. It is used to set the options of the select list. */
   useEffect(() => {
-    const options = arrayList.map((option) => ({
-      value: lng === "fr" ? option?.fr_FR || option?.label?.fr_FR : option?.en_GB || option?.label?.en_GB,
-      label: lng === "fr" ? option?.fr_FR || option?.label?.fr_FR : option?.en_GB || option?.label?.en_GB,
-      object: option,
-    }));
-    setoptions(options);
-  }, [arrayList]);
+    let isMounted = true;
+    const createOptions = (data) => {
+      return data.map((option) => ({
+        value: lng === "fr" ? option?.fr_FR || option?.label?.fr_FR : option?.en_GB || option?.label?.en_GB,
+        label: lng === "fr" ? option?.fr_FR || option?.label?.fr_FR : option?.en_GB || option?.label?.en_GB,
+        object: option,
+      }));
+    };
+    const setOptions = (data) => {
+      if (isMounted) {
+        setoptions(data);
+      }
+    };
+    getRegistryValue(registry, "token")
+      .then((res) => {
+        if (res) {
+          setOptions(createOptions(res));
+        } else {
+          return getRegistry(registry, "token").then((resRegistry) => {
+            setOptions(createOptions(resRegistry));
+          });
+        }
+      })
+      .catch((error) => {
+        // handle errors
+      });
+    return () => {
+      isMounted = false;
+    };
+  }, [registry, lng]);
 
   /**
    * It takes the value of the input field and adds it to the list array.
@@ -73,7 +96,7 @@ function SelectMultipleList({ label, arrayList, name, changeValue, tooltip }) {
           </span>
         )}
         <div className="row">
-          <div className="col-10">
+          <div className="col-md-10">
             <Select
               onChange={handleChangeList}
               options={options}
@@ -90,11 +113,11 @@ function SelectMultipleList({ label, arrayList, name, changeValue, tooltip }) {
           {list &&
             list.map((el, idx) => (
               <div key={idx} className="row border">
-                <div className="col-11">
+                <div className="col-md-11">
                   <p className="border m-2"> {list[idx]} </p>
                 </div>
-                <div className="col-1">
-                  <i className="fa fa-close mt-3 text-danger" aria-hidden="true" onClick={() => handleDeleteListe(idx)}></i>
+                <div className="col-md-1">
+                  <i className="fa fa-times icon-margin-top text-danger" aria-hidden="true" onClick={() => handleDeleteListe(idx)}></i>
                 </div>
               </div>
             ))}

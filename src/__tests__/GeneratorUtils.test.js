@@ -1,31 +1,4 @@
-import {
-  getRegistryList,
-  parsePatern,
-  createMarkup,
-  deleteByIndex,
-  getCheckPatern,
-  checkRequiredForm,
-  isEmptyObject,
-  getLabelName,
-} from "../utils/GeneratorUtils";
-
-describe("getRegistryList", () => {
-  it("returns the registry list for a given registry name", () => {
-    const registryName = "VolumeUnit";
-    const registerFile = require(`../data/templates/registry_values.json`);
-    const expectedResult = registerFile[registryName];
-    const result = getRegistryList(registryName);
-    expect(result).toEqual(expectedResult);
-  });
-
-  it("returns the registry list from a JSON file if it is not in the registryValueTemplates object", () => {
-    const registryName = "StorageServices";
-    const registerFile = require(`../data/registres/${registryName}.json`);
-    const expectedResult = registerFile[registryName];
-    const result = getRegistryList(registryName);
-    expect(result).toEqual(expectedResult);
-  });
-});
+import { parsePatern, createMarkup, deleteByIndex, getCheckPatern, checkRequiredForm, isEmptyObject, getLabelName } from "../utils/GeneratorUtils";
 
 describe("parsePattern", () => {
   it("returns a string with keys mapped to their values in the data object", () => {
