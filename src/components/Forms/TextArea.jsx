@@ -7,10 +7,11 @@ import htmlToDraft from "html-to-draftjs";
 import { GlobalContext } from "../context/Global";
 
 function TextArea({ label, name, changeValue, tooltip }) {
-  const { temp } = useContext(GlobalContext);
+  const { form, temp } = useContext(GlobalContext);
   /* Setting the initial state of the editor. */
   useEffect(() => {
-    const blocksFromHtml = htmlToDraft(temp ? temp[name] : "<p></p>");
+    console.log(form[name]);
+    const blocksFromHtml = htmlToDraft(temp ? temp[name] : form[name] ? form[name] : "<p></p>");
     const { contentBlocks, entityMap } = blocksFromHtml;
     const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
     const editorStateDraft = EditorState.createWithContent(contentState);

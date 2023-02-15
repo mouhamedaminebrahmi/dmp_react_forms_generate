@@ -13,7 +13,8 @@ function App() {
   const [standardTemplate, setstandardTemplate] = useState(null);
 
   useEffect(() => {
-    getSchema("DataStorageStandard", "token").then((el) => {
+    //DataStorageStandard
+    getSchema("ProjectStandard", "token").then((el) => {
       setstandardTemplate(el);
     });
   }, []);

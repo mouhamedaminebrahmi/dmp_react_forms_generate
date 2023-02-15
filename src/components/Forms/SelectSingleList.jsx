@@ -6,7 +6,7 @@ import { GlobalContext } from "../context/Global";
 function SelectSingleList({ label, name, changeValue, tooltip, registry }) {
   const [list, setlist] = useState([]);
   const [options, setoptions] = useState(null);
-  const { temp, lng } = useContext(GlobalContext);
+  const { form, temp, lng } = useContext(GlobalContext);
 
   /* A hook that is called when the component is mounted. It is used to set the options of the select list. */
   useEffect(() => {
@@ -67,8 +67,8 @@ function SelectSingleList({ label, name, changeValue, tooltip, registry }) {
               name={name}
               //defaultValue={isEdit ? isEdit[name] : "Sélectionnez une valeur de la liste ou saisissez une nouvelle."}
               defaultValue={{
-                label: temp ? temp[name] : "Sélectionnez une valeur de la liste ou saisissez une nouvelle.",
-                value: temp ? temp[name] : "Sélectionnez une valeur de la liste ou saisissez une nouvelle.",
+                label: temp ? temp[name] : form[name] ? form[name] : "Sélectionnez une valeur de la liste ou saisissez une nouvelle.",
+                value: temp ? temp[name] : form[name] ? form[name] : "Sélectionnez une valeur de la liste ou saisissez une nouvelle.",
               }}
             />
           </div>

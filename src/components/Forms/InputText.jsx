@@ -7,7 +7,7 @@ import { GlobalContext } from "../context/Global";
  * @returns A React Component
  */
 function InputText({ label, type, placeholder, name, changeValue, tooltip, hidden, isConst }) {
-  const { setform, temp } = useContext(GlobalContext);
+  const { form, setform, temp } = useContext(GlobalContext);
   const [text, settext] = useState(null);
   const [isRequired, setisRequired] = useState(false);
 
@@ -17,6 +17,10 @@ function InputText({ label, type, placeholder, name, changeValue, tooltip, hidde
       setform({ [name]: isConst });
     }
   }, []);
+
+  useEffect(() => {
+    settext(form[name]);
+  }, [form[name]]);
 
   /**
    * It takes a number, formats it to a string, and then sets the state of the text variable to that string.

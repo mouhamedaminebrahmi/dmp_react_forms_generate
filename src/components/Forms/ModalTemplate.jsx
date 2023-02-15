@@ -120,13 +120,13 @@ function ModalTemplate({ value, template, keyValue, level, tooltip }) {
             registerFile &&
             form[keyValue].map((el, idx) => (
               <div key={idx} className="row border">
-                <div className="col-10">
+                <div className="col-md-10">
                   <div className="preview" dangerouslySetInnerHTML={createMarkup(parsePatern(el, registerFile.to_string))}></div>
                 </div>
-                <div className="col-1">
+                <div className="col-md-1">
                   {level === 1 && <i className="fa fa-edit m-3 text-primary" aria-hidden="true" onClick={() => handleEdit(idx)}></i>}
                 </div>
-                <div className="col-1">
+                <div className="col-md-1">
                   <i className="fa fa-times m-3  text-danger" aria-hidden="true" onClick={() => handleDeleteListe(idx)}></i>
                 </div>
               </div>
