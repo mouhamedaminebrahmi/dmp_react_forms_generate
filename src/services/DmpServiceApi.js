@@ -45,6 +45,15 @@ export async function getRegistry(t, token) {
   }
 }
 
+export async function getContributor(token) {
+  try {
+    const response = await axios.get("https://mocki.io/v1/96771ddd-1144-4dd5-8462-50e31461c235");
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 /**
  * It sends a POST request to the server with the jsonObject as the body of the request.
  * </code>

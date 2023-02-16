@@ -1,60 +1,33 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import BuilderForm from "../Builder/BuilderForm";
-import Select from "react-select";
 import { parsePatern } from "../../utils/GeneratorUtils";
 import { GlobalContext } from "../context/Global";
 import toast from "react-hot-toast";
-import { getSchema } from "../../services/DmpServiceApi";
+import { getContributor, getSchema } from "../../services/DmpServiceApi";
 
 function SelectContributorSingle({ label, name, changeValue, template, keyValue, level, tooltip }) {
   const [show, setShow] = useState(false);
   const [options, setoptions] = useState(null);
-  const [selectObject, setselectObject] = useState([]);
   const { form, setform, temp, settemp } = useContext(GlobalContext);
   const [index, setindex] = useState(null);
   const [registerFile, setregisterFile] = useState(null);
   const [selectedValue, setselectedValue] = useState(null);
 
-  //   useEffect(() => {
-  //     getSchema(template, "token").then((el) => {
-  //       setregisterFile(el);
-  //       const patern = el.to_string;
-  //       if (form[keyValue] !== undefined) {
-  //         const options = form[keyValue].map((option) => ({
-  //           value: option.firstName + " " + option.lastName,
-  //           label: parsePatern(option, patern),
-  //           object: option,
-  //           objectName: parsePatern(option, patern),
-  //         }));
-  //         setoptions(options);
-  //         setselectedValue(parsePatern(form[keyValue][0], patern));
-  //       } else {
-  //         setselectedValue("Sélectionnez une valeur de la liste ou saisissez une nouvelle");
-  //         return;
-  //       }
-
-  //       if (!patern.length) {
-  //         return;
-  //       }
-  //     });
-  //   }, [template, form[keyValue]]);
-
   useEffect(() => {
-    let isMounted = true;
-    console.log("f");
-
-    const fetchData = async () => {
-      try {
-        const el = await getSchema(template, "token");
-        if (!isMounted) {
-          return;
-        }
-
-        setregisterFile(el);
-        const patern = el.to_string;
-        if (form && form[keyValue]) {
-          const options = form[keyValue].map((option) => ({
+    getSchema(template, "token").then((resTemp) => {
+      setregisterFile(resTemp);
+      const patern = resTemp.to_string;
+      getContributor("token").then((res) => {
+        const optionsContributor = res.data.map((option) => ({
+          value: option.firstName + " " + option.lastName,
+          label: option.firstName + " " + option.lastName,
+          object: option,
+        }));
+        if (form[keyValue] !== undefined) {
+          var ids = new Set(form[keyValue].map((d) => d.lastName && d.firstName));
+          var merged = [...form[keyValue], ...res.data.filter((d) => !ids.has(d.lastName) && !ids.has(d.firstName))];
+          const options = merged.map((option) => ({
             value: option.firstName + " " + option.lastName,
             label: parsePatern(option, patern),
             object: option,
@@ -63,24 +36,19 @@ function SelectContributorSingle({ label, name, changeValue, template, keyValue,
           setoptions(options);
           setselectedValue(parsePatern(form[keyValue][0], patern));
         } else {
+          setoptions(optionsContributor);
           setselectedValue("Sélectionnez une valeur de la liste ou saisissez une nouvelle");
           return;
         }
+      });
 
-        if (!patern.length) {
-          return;
-        }
-      } catch (error) {
-        console.error(error);
+      if (!patern.length) {
+        return;
       }
-    };
+    });
+  }, [template, form[keyValue]]);
 
-    fetchData();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [template, keyValue, selectedValue]);
+  useEffect(() => {}, []);
 
   /**
    * It closes the modal and resets the state of the modal.
@@ -104,15 +72,10 @@ function SelectContributorSingle({ label, name, changeValue, template, keyValue,
    */
   const handleChangeList = (e) => {
     const patern = registerFile.to_string;
-    const { object, value, objectName } = e;
-    console.log(selectedValue);
-    setselectedValue(objectName);
-
+    const { object, value } = options[e.target.value];
+    setselectedValue(e.target.value);
     if (patern.length > 0) {
-      setselectObject([...selectObject, object]);
       changeValue({ target: { name, value: [object] } });
-      //   const newObject = { person: object, role: "from list" };
-      //   const arr3 = form[keyValue] ? [newObject] : [newObject];
       setform({ ...form, [keyValue]: [object] });
     } else {
       changeValue({ target: { name, value } });
@@ -175,7 +138,7 @@ function SelectContributorSingle({ label, name, changeValue, template, keyValue,
 
           <div className="row">
             <div className="col-md-10">
-              {selectedValue && (
+              {/* {selectedValue && (
                 <Select
                   onChange={handleChangeList}
                   options={options}
@@ -186,6 +149,17 @@ function SelectContributorSingle({ label, name, changeValue, template, keyValue,
                     value: temp ? temp[name] : selectedValue,
                   }}
                 />
+              )} */}
+              {options && (
+                <select id="company" className="form-control" onChange={handleChangeList}>
+                  {!form[keyValue] && <option>Sélectionnez une valeur de la liste ou saisissez une nouvelle.</option>}
+                  {options.map((o, idx) => (
+                    <option key={o.value} value={idx}>
+                      {o.label}
+                    </option>
+                  ))}
+                  ;
+                </select>
               )}
             </div>
             <div className="col-md-2">
@@ -203,23 +177,6 @@ function SelectContributorSingle({ label, name, changeValue, template, keyValue,
             </div>
           )}
         </div>
-
-        {/* <div style={{ margin: "20px 90px 20px 20px" }}>
-          {list &&
-            list.map((el, idx) => (
-              <div key={idx} className="row border">
-                <div className="col-md-10">
-                  <p className="border m-2"> {list[idx]} </p>
-                </div>
-                <div className="col-md-1">
-                  {level === 1 && <i className="fa fa-edit icon-margin-top text-primary" aria-hidden="true" onClick={() => handleEdit(idx)}></i>}
-                </div>
-                <div className="col-md-1">
-                  <i className="fa fa-times icon-margin-top text-danger" aria-hidden="true" onClick={() => handleDeleteListe(idx)}></i>
-                </div>
-              </div>
-            ))}
-        </div> */}
       </div>
       <>
         {registerFile && (

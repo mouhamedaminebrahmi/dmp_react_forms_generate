@@ -12,7 +12,7 @@ import { getSchema } from "../../services/DmpServiceApi";
  * </code>
  * @returns A React component.
  */
-function ModalTemplate({ value, template, keyValue, level, tooltip }) {
+function ModalTemplate({ value, template, keyValue, level, tooltip, header }) {
   const [show, setShow] = useState(false);
   const { form, setform, temp, settemp, lng } = useContext(GlobalContext);
   const [index, setindex] = useState(null);
@@ -115,7 +115,8 @@ function ModalTemplate({ value, template, keyValue, level, tooltip }) {
             ?
           </span>
         )}
-        <div style={{ margin: "20px 90px 20px 20px" }}>
+        {/* <div style={{ margin: "20px 90px 20px 20px" }}>
+          {form[keyValue] && registerFile && header && <p>{header}</p>}
           {form[keyValue] &&
             registerFile &&
             form[keyValue].map((el, idx) => (
@@ -131,7 +132,37 @@ function ModalTemplate({ value, template, keyValue, level, tooltip }) {
                 </div>
               </div>
             ))}
-        </div>
+        </div> */}
+
+        {form[keyValue] && registerFile && (
+          <table style={{ marginTop: "20px" }} className="table table-bordered">
+            <thead>
+              {form[keyValue] && registerFile && header && (
+                <tr>
+                  <th scope="col">{header}</th>
+                  <th scope="col"></th>
+                </tr>
+              )}
+            </thead>
+            <tbody>
+              {form[keyValue].map((el, idx) => (
+                <tr key={idx}>
+                  <td scope="row">
+                    <div className="preview" dangerouslySetInnerHTML={createMarkup(parsePatern(el, registerFile.to_string))}></div>
+                  </td>
+                  <td style={{ width: "10%" }}>
+                    <div className="col-md-1">
+                      {level === 1 && <i className="fa fa-edit m-3 text-primary" aria-hidden="true" onClick={() => handleEdit(idx)}></i>}
+                    </div>
+                    <div className="col-md-1">
+                      <i className="fa fa-times m-3  text-danger" aria-hidden="true" onClick={() => handleDeleteListe(idx)}></i>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
 
         <button className="btn btn-primary button-margin" onClick={() => handleShow(true)}>
           Créé

@@ -6,9 +6,9 @@ import { deleteByIndex, parsePatern } from "../../utils/GeneratorUtils";
 import { GlobalContext } from "../context/Global";
 import swal from "sweetalert";
 import toast from "react-hot-toast";
-import { getSchema } from "../../services/DmpServiceApi";
+import { getContributor, getSchema } from "../../services/DmpServiceApi";
 
-function SelectContributor({ label, arrayList, name, changeValue, template, keyValue, level, tooltip }) {
+function SelectContributor({ label, name, changeValue, registry, keyValue, level, tooltip, header }) {
   const [list, setlist] = useState([]);
 
   const [show, setShow] = useState(false);
@@ -16,32 +16,43 @@ function SelectContributor({ label, arrayList, name, changeValue, template, keyV
   const [selectObject, setselectObject] = useState([]);
   const { form, setform, temp, settemp } = useContext(GlobalContext);
   const [index, setindex] = useState(null);
-
   const [registerFile, setregisterFile] = useState(null);
+  const [role, setrole] = useState(null);
 
+  /* A hook that is called when the component is mounted. */
   useEffect(() => {
-    getSchema(template, "token").then((el) => {
-      setregisterFile(el);
+    getContributor("token").then((res) => {
+      const options = res.data.map((option) => ({
+        value: option.firstName + " " + option.lastName,
+        label: option.firstName + " " + option.lastName,
+        object: option,
+      }));
+      setoptions(options);
+    });
+  }, []);
+
+  /* A hook that is called when the component is mounted. */
+  useEffect(() => {
+    getSchema(registry, "token").then((res) => {
+      setrole(res.properties.role["const@fr_FR"]);
+      setregisterFile(res.properties.person.template_name);
+      const template = res.properties.person["template_name"];
+      getSchema(template, "token").then((res) => {
+        setregisterFile(res);
+      });
+
       if (!form[keyValue]) {
         return;
       }
-      const patern = el.to_string;
+      const patern = res.to_string;
       if (!patern.length) {
         return;
       }
-      setlist(form[keyValue].map((el) => parsePatern(el.person, patern)));
-    });
-  }, [template, form[keyValue], registerFile]);
 
-  /* A hook that is called when the component is mounted. It is used to set the options of the select list. */
-  useEffect(() => {
-    const options = arrayList.map((option) => ({
-      value: option.firstName + " " + option.lastName,
-      label: option.firstName + " " + option.lastName,
-      object: option,
-    }));
-    setoptions(options);
-  }, []);
+      setlist(form[keyValue].map((el) => parsePatern(el, patern)));
+    });
+  }, [form[keyValue], registry]);
+
   /**
    * It closes the modal and resets the state of the modal.
    */
@@ -72,7 +83,7 @@ function SelectContributor({ label, arrayList, name, changeValue, template, keyV
       setlist([...list, parsedPatern]);
       changeValue({ target: { name, value: [...selectObject, object] } });
 
-      const newObject = { person: object, role: "from list" };
+      const newObject = { person: object, role: role };
       const arr3 = form[keyValue] ? [...form[keyValue], newObject] : [newObject];
       setform({ ...form, [keyValue]: arr3 });
     } else {
@@ -111,7 +122,7 @@ function SelectContributor({ label, arrayList, name, changeValue, template, keyV
    */
   const handleAddToList = () => {
     if (index !== null) {
-      const objectPerson = { person: temp, role: "from create" };
+      const objectPerson = { person: temp, role: role };
       setform({ ...form, [keyValue]: [...deleteByIndex(form[keyValue], index), objectPerson] });
       const parsedPatern = parsePatern(temp, registerFile.to_string);
       setlist([...deleteByIndex([...list], index), parsedPatern]);
@@ -128,7 +139,7 @@ function SelectContributor({ label, arrayList, name, changeValue, template, keyV
    * temporary person object and add it to the list array, then it will close the modal and set the temporary person object to null.
    */
   const handleSave = () => {
-    const objectPerson = { person: temp, role: "from create" };
+    const objectPerson = { person: temp, role: role };
     setform({ ...form, [keyValue]: [...(form[keyValue] || []), objectPerson] });
     const parsedPatern = parsePatern(temp, registerFile.to_string);
     setlist([...list, parsedPatern]);
@@ -173,7 +184,38 @@ function SelectContributor({ label, arrayList, name, changeValue, template, keyV
           </div>
         </div>
 
-        <div style={{ margin: "20px 90px 20px 20px" }}>
+        {form[keyValue] && list && (
+          <table style={{ marginTop: "20px" }} className="table table-bordered">
+            <thead>
+              {header && (
+                <tr>
+                  <th scope="col">{header}</th>
+                  <th scope="col"></th>
+                </tr>
+              )}
+            </thead>
+            <tbody>
+              {form[keyValue].map((el, idx) => (
+                <tr key={idx}>
+                  <td scope="row">
+                    <p className="border m-2"> {list[idx]} </p>
+                  </td>
+                  <td style={{ width: "10%" }}>
+                    <div className="col-md-1">
+                      {level === 1 && <i className="fa fa-edit icon-margin-top text-primary" aria-hidden="true" onClick={() => handleEdit(idx)}></i>}
+                    </div>
+                    <div className="col-md-1">
+                      <i className="fa fa-times icon-margin-top text-danger" aria-hidden="true" onClick={() => handleDeleteListe(idx)}></i>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+
+        {/* <div style={{ margin: "20px 90px 20px 20px" }}>
+          {form[keyValue] && header && <p>{header}</p>}
           {list &&
             list.map((el, idx) => (
               <div key={idx} className="row border">
@@ -188,7 +230,7 @@ function SelectContributor({ label, arrayList, name, changeValue, template, keyV
                 </div>
               </div>
             ))}
-        </div>
+        </div> */}
       </div>
       <>
         {registerFile && (

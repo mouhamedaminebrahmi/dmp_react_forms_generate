@@ -8,7 +8,7 @@ import swal from "sweetalert";
 import toast from "react-hot-toast";
 import { getRegistry, getRegistryValue, getSchema } from "../../services/DmpServiceApi";
 
-function SelectWithCreate({ label, registry, name, changeValue, template, keyValue, level, tooltip }) {
+function SelectWithCreate({ label, registry, name, changeValue, template, keyValue, level, tooltip, header }) {
   const [list, setlist] = useState([]);
 
   const [show, setShow] = useState(false);
@@ -201,7 +201,8 @@ function SelectWithCreate({ label, registry, name, changeValue, template, keyVal
           </div>
         </div>
 
-        <div style={{ margin: "20px 90px 20px 20px" }}>
+        {/* <div style={{ margin: "20px 90px 20px 20px" }}>
+          {form[keyValue] && header && <p>{header}</p>}
           {list &&
             list.map((el, idx) => (
               <div key={idx} className="row border">
@@ -216,7 +217,37 @@ function SelectWithCreate({ label, registry, name, changeValue, template, keyVal
                 </div>
               </div>
             ))}
-        </div>
+        </div> */}
+
+        {form[keyValue] && list && (
+          <table style={{ marginTop: "20px" }} className="table table-bordered">
+            <thead>
+              {header && (
+                <tr>
+                  <th scope="col">{header}</th>
+                  <th scope="col"></th>
+                </tr>
+              )}
+            </thead>
+            <tbody>
+              {form[keyValue].map((el, idx) => (
+                <tr key={idx}>
+                  <td scope="row">
+                    <p className="border m-2"> {list[idx]} </p>
+                  </td>
+                  <td style={{ width: "10%" }}>
+                    <div className="col-md-1">
+                      {level === 1 && <i className="fa fa-edit icon-margin-top text-primary" aria-hidden="true" onClick={() => handleEdit(idx)}></i>}
+                    </div>
+                    <div className="col-md-1">
+                      <i className="fa fa-times icon-margin-top text-danger" aria-hidden="true" onClick={() => handleDeleteListe(idx)}></i>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
       <>
         <Modal show={show} onHide={handleClose}>

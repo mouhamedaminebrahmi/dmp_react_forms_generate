@@ -4,7 +4,7 @@ import { GlobalContext } from "../context/Global";
 import swal from "sweetalert";
 import { getRegistry, getRegistryValue } from "../../services/DmpServiceApi";
 
-function SelectMultipleList({ label, registry, name, changeValue, tooltip }) {
+function SelectMultipleList({ label, registry, name, changeValue, tooltip, header }) {
   const [list, setlist] = useState([]);
   const [options, setoptions] = useState(null);
   const { temp, settemp, lng } = useContext(GlobalContext);
@@ -110,6 +110,7 @@ function SelectMultipleList({ label, registry, name, changeValue, tooltip }) {
           </div>
         </div>
         <div style={{ margin: "20px 30px 20px 20px" }}>
+          {header && <p>{header}</p>}
           {list &&
             list.map((el, idx) => (
               <div key={idx} className="row border">
