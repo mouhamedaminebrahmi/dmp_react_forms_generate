@@ -1,54 +1,58 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import BuilderForm from "../Builder/BuilderForm";
-import { parsePatern } from "../../utils/GeneratorUtils";
+import Select from "react-select";
+import { deleteByIndex, parsePatern } from "../../utils/GeneratorUtils";
 import { GlobalContext } from "../context/Global";
+import swal from "sweetalert";
 import toast from "react-hot-toast";
 import { getContributor, getSchema } from "../../services/DmpServiceApi";
 
-function SelectContributorSingle({ label, name, changeValue, template, keyValue, level, tooltip }) {
+function SelectFunder({ label, name, changeValue, registry, keyValue, level, tooltip }) {
+  const [list, setlist] = useState([]);
+
   const [show, setShow] = useState(false);
   const [options, setoptions] = useState(null);
+  const [selectObject, setselectObject] = useState([]);
   const { form, setform, temp, settemp } = useContext(GlobalContext);
   const [index, setindex] = useState(null);
   const [registerFile, setregisterFile] = useState(null);
+  const [role, setrole] = useState(null);
   const [selectedValue, setselectedValue] = useState(null);
 
+  /* A hook that is called when the component is mounted. */
   useEffect(() => {
-    getSchema(template, "token").then((resTemp) => {
-      setregisterFile(resTemp);
-      const patern = resTemp.to_string;
-      getContributor("token").then((res) => {
-        const optionsContributor = res.data.map((option) => ({
-          value: option.firstName + " " + option.lastName,
-          label: option.firstName + " " + option.lastName,
-          object: option,
-        }));
-        if (form[keyValue] !== undefined) {
-          var ids = new Set(form[keyValue].map((d) => d.lastName && d.firstName));
-          var merged = [...form[keyValue], ...res.data.filter((d) => !ids.has(d.lastName) && !ids.has(d.firstName))];
-          const options = merged.map((option) => ({
-            value: option.firstName + " " + option.lastName,
-            label: parsePatern(option, patern),
-            object: option,
-            objectName: parsePatern(option, patern),
-          }));
-          setoptions(options);
-          setselectedValue(parsePatern(form[keyValue][0], patern));
-        } else {
-          setoptions(optionsContributor);
-          setselectedValue("Sélectionnez une valeur de la liste ou saisissez une nouvelle");
+    getContributor("token").then((res) => {
+      const options = res.data.map((option) => ({
+        value: option.firstName + " " + option.lastName,
+        label: option.firstName + " " + option.lastName,
+        object: option,
+      }));
+      setoptions(options);
+    });
+  }, []);
+
+  /* A hook that is called when the component is mounted. */
+  useEffect(() => {
+    getSchema(registry, "token").then((resRegistry) => {
+      setrole(resRegistry.properties.role["const@fr_FR"]);
+      setregisterFile(resRegistry.properties.person.template_name);
+      const template = resRegistry.properties.person["template_name"];
+      getSchema(template, "token").then((res) => {
+        setregisterFile(res);
+        if (!form[keyValue]) {
           return;
         }
+        const patern = res.to_string;
+        if (!patern.length) {
+          return;
+        }
+        console.log(form[keyValue]);
+        setlist(form[keyValue].map((el) => parsePatern(el, patern)));
+        setselectedValue(parsePatern(form[keyValue][0], patern));
       });
-
-      if (!patern.length) {
-        return;
-      }
     });
-  }, [template, form[keyValue]]);
-
-  useEffect(() => {}, []);
+  }, [form[keyValue], registry]);
 
   /**
    * It closes the modal and resets the state of the modal.
@@ -66,14 +70,10 @@ function SelectContributorSingle({ label, name, changeValue, template, keyValue,
     setShow(isOpen);
   };
 
-  /**
-   * It takes the value of the input field and adds it to the list array.
-   * @param e - the event object
-   */
   const handleChangeList = (e) => {
     const patern = registerFile.to_string;
     const { object, value } = options[e.target.value];
-    setselectedValue(e.target.value);
+    setselectedValue(options[e.target.value].value);
     if (patern.length > 0) {
       changeValue({ target: { name, value: [object] } });
       setform({ ...form, [keyValue]: [object] });
@@ -112,7 +112,6 @@ function SelectContributorSingle({ label, name, changeValue, template, keyValue,
     settemp(null);
     setselectedValue(parsePatern(temp, registerFile.to_string));
   };
-
   /**
    * It sets the state of the temp variable to the value of the form[keyValue][idx] variable.
    * @param idx - the index of the item in the array
@@ -132,51 +131,33 @@ function SelectContributorSingle({ label, name, changeValue, template, keyValue,
             ?
           </span>
         )}
-
-        <div>
-          <h6>Sélectionner une valeur dans la liste ou créer une nouvelle valeur en cliquant sur +</h6>
-
-          <div className="row">
-            <div className="col-md-10">
-              {/* {selectedValue && (
-                <Select
-                  onChange={handleChangeList}
-                  options={options}
-                  name={name}
-                  //defaultValue={isEdit ? isEdit[name] : "Sélectionnez une valeur de la liste ou saisissez une nouvelle."}
-                  defaultValue={{
-                    label: temp ? temp[name] : selectedValue,
-                    value: temp ? temp[name] : selectedValue,
-                  }}
-                />
-              )} */}
-              {options && (
-                <select id="company" className="form-control" onChange={handleChangeList}>
-                  {!form[keyValue] && <option>Sélectionnez une valeur de la liste ou saisissez une nouvelle.</option>}
-                  {options.map((o, idx) => (
-                    <option key={o.value} value={idx}>
-                      {o.label}
-                    </option>
-                  ))}
-                  ;
-                </select>
-              )}
-            </div>
-            <div className="col-md-2">
-              <i className="fas fa-plus-square text-primary icon-margin-top" onClick={handleShow}></i>
-            </div>
+        <div className="row">
+          <div className="col-md-10">
+            {options && (
+              <select id="company" className="form-control" onChange={handleChangeList}>
+                {selectedValue && <option>Sélectionnez une valeur de la liste ou saisissez une nouvelle.</option>}
+                {options.map((o, idx) => (
+                  <option key={o.value} value={idx}>
+                    {o.label}
+                  </option>
+                ))}
+                ;
+              </select>
+            )}
           </div>
-
-          {form[keyValue] && (
-            <div style={{ margin: "10px" }}>
-              <strong>Valeur sélectionnée :</strong> {selectedValue}
-              <a href="#" onClick={() => handleEdit(0)}>
-                {" "}
-                (modifié)
-              </a>
-            </div>
-          )}
+          <div className="col-md-2">
+            <i className="fas fa-plus-square text-primary icon-margin-top" onClick={handleShow}></i>
+          </div>
         </div>
+        {form[keyValue] && (
+          <div style={{ margin: "10px" }}>
+            <strong>Valeur sélectionnée :</strong> {selectedValue}
+            <a href="#" onClick={() => handleEdit(0)}>
+              {" "}
+              (modifié)
+            </a>
+          </div>
+        )}
       </div>
       <>
         {registerFile && (
@@ -199,4 +180,4 @@ function SelectContributorSingle({ label, name, changeValue, template, keyValue,
   );
 }
 
-export default SelectContributorSingle;
+export default SelectFunder;
