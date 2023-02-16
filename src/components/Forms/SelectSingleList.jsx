@@ -46,7 +46,8 @@ function SelectSingleList({ label, name, changeValue, tooltip, registry }) {
    * @param e - the event object
    */
   const handleChangeList = (e) => {
-    changeValue({ target: { name: name, value: e.object } });
+    console.log(e.object);
+    changeValue({ target: { name: name, value: e.object["fr_FR"] } });
     setlist([...list, e.value]);
   };
 
@@ -67,8 +68,8 @@ function SelectSingleList({ label, name, changeValue, tooltip, registry }) {
               name={name}
               //defaultValue={isEdit ? isEdit[name] : "Sélectionnez une valeur de la liste ou saisissez une nouvelle."}
               defaultValue={{
-                label: temp ? temp[name] : form[name] ? form[name]["fr_FR"] : "Sélectionnez une valeur de la liste ou saisissez une nouvelle.",
-                value: temp ? temp[name] : form[name] ? form[name]["fr_FR"] : "Sélectionnez une valeur de la liste ou saisissez une nouvelle.",
+                label: temp ? temp[name] : form[name] ? form[name] : "Sélectionnez une valeur de la liste ou saisissez une nouvelle.",
+                value: temp ? temp[name] : form[name] ? form[name] : "Sélectionnez une valeur de la liste ou saisissez une nouvelle.",
               }}
             />
           </div>
