@@ -4,7 +4,6 @@ import { getRegistry, getRegistryValue } from "../../services/DmpServiceApi";
 import { GlobalContext } from "../context/Global";
 
 function SelectSingleList({ label, name, changeValue, tooltip, registry }) {
-  const [list, setlist] = useState([]);
   const [options, setoptions] = useState(null);
   const { form, temp, lng } = useContext(GlobalContext);
 
@@ -23,19 +22,15 @@ function SelectSingleList({ label, name, changeValue, tooltip, registry }) {
         setoptions(data);
       }
     };
-    getRegistryValue(registry, "token")
-      .then((res) => {
-        if (res) {
-          setOptions(createOptions(res));
-        } else {
-          return getRegistry(registry, "token").then((resRegistry) => {
-            setOptions(createOptions(resRegistry));
-          });
-        }
-      })
-      .catch((error) => {
-        // handle errors
-      });
+    getRegistryValue(registry, "token").then((res) => {
+      if (res) {
+        setOptions(createOptions(res));
+      } else {
+        return getRegistry(registry, "token").then((resRegistry) => {
+          setOptions(createOptions(resRegistry));
+        });
+      }
+    });
     return () => {
       isMounted = false;
     };
@@ -46,9 +41,10 @@ function SelectSingleList({ label, name, changeValue, tooltip, registry }) {
    * @param e - the event object
    */
   const handleChangeList = (e) => {
-    console.log(e.object);
-    changeValue({ target: { name: name, value: e.object["fr_FR"] } });
-    setlist([...list, e.value]);
+    console.log(e.object?.fr_FR);
+    console.log(e.object?.label?.fr_FR);
+    const label = e.object?.fr_FR || e.object?.label?.fr_FR;
+    changeValue({ target: { name: name, value: e.object } });
   };
 
   return (
@@ -66,15 +62,15 @@ function SelectSingleList({ label, name, changeValue, tooltip, registry }) {
               onChange={handleChangeList}
               options={options}
               name={name}
-              //defaultValue={isEdit ? isEdit[name] : "Sélectionnez une valeur de la liste ou saisissez une nouvelle."}
               defaultValue={{
-                label: temp ? temp[name] : form[name] ? form[name] : "Sélectionnez une valeur de la liste ou saisissez une nouvelle.",
-                value: temp ? temp[name] : form[name] ? form[name] : "Sélectionnez une valeur de la liste ou saisissez une nouvelle.",
+                label: temp ? temp[name]?.label?.fr_FR : form[name] ? "form[name]" : "Sélectionnez une valeur de la liste ou saisissez une nouvelle.",
+                value: temp ? temp[name]?.label?.fr_FR : form[name] ? "form[name]" : "Sélectionnez une valeur de la liste ou saisissez une nouvelle.",
               }}
             />
           </div>
         </div>
       </div>
+      {temp && <p>{JSON.stringify(temp[name]?.label?.fr_FR)}</p>}
     </>
   );
 }
