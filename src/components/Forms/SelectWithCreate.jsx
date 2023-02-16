@@ -222,7 +222,7 @@ function SelectWithCreate({ label, registry, name, changeValue, template, keyVal
         {form[keyValue] && list && (
           <table style={{ marginTop: "20px" }} className="table table-bordered">
             <thead>
-              {header && (
+              {form[keyValue].length > 0 && header && (
                 <tr>
                   <th scope="col">{header}</th>
                   <th scope="col"></th>

@@ -137,7 +137,7 @@ function ModalTemplate({ value, template, keyValue, level, tooltip, header }) {
         {form[keyValue] && registerFile && (
           <table style={{ marginTop: "20px" }} className="table table-bordered">
             <thead>
-              {form[keyValue] && registerFile && header && (
+              {form[keyValue].length > 0 && registerFile && header && (
                 <tr>
                   <th scope="col">{header}</th>
                   <th scope="col"></th>
