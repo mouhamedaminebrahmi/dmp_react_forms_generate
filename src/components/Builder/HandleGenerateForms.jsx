@@ -8,6 +8,7 @@ import SelectMultipleList from "../Forms/SelectMultipleList";
 import SelectSingleList from "../Forms/SelectSingleList";
 import SelectWithCreate from "../Forms/SelectWithCreate";
 import listContributor from "../../data/contributor.json";
+import SelectContributorSingle from "../Forms/SelectContributorSingle";
 
 function HandleGenerateForms({ shemaObject, level, lng, changeValue }) {
   const objectProp = shemaObject.properties;
@@ -149,6 +150,22 @@ function HandleGenerateForms({ shemaObject, level, lng, changeValue }) {
                 keyValue={key}
                 level={level}
               ></ModalTemplate>
+            );
+          }
+
+          if (value.class === "Contributor") {
+            //console.log("TODO : condition contributor à voir");
+            data.push(
+              <SelectContributorSingle
+                label={label}
+                name={key}
+                key={key}
+                changeValue={changeValue}
+                template={"PersonStandard"}
+                keyValue={key}
+                level={level}
+                tooltip={tooltip}
+              ></SelectContributorSingle>
             );
           }
         }

@@ -10,7 +10,6 @@ function TextArea({ label, name, changeValue, tooltip }) {
   const { form, temp } = useContext(GlobalContext);
   /* Setting the initial state of the editor. */
   useEffect(() => {
-    console.log(form[name]);
     const blocksFromHtml = htmlToDraft(temp ? temp[name] : form[name] ? form[name] : "<p></p>");
     const { contentBlocks, entityMap } = blocksFromHtml;
     const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
