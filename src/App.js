@@ -19,7 +19,7 @@ function App() {
     //DataStorageStandard
     //ProjectStandard
     setLoading(true);
-    getSchema("ProjectStandard", "token")
+    getSchema("DataStorageStandard", "token")
       .then((el) => {
         setstandardTemplate(el);
       })

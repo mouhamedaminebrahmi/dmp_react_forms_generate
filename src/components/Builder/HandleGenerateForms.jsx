@@ -33,7 +33,6 @@ function HandleGenerateForms({ shemaObject, level, lng, changeValue }) {
         // Condition 1.2
         // si inputType === dropdown
         if (value.inputType === "dropdown" && value.hasOwnProperty("registry_name")) {
-          console.log("me");
           data.push(
             <SelectSingleList
               label={label}
@@ -118,7 +117,6 @@ function HandleGenerateForms({ shemaObject, level, lng, changeValue }) {
                 ></SelectContributor>
               );
             } else {
-              console.log(value);
               data.push(
                 <ModalTemplate
                   key={key}

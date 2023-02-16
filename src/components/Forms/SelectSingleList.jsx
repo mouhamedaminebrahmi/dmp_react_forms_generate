@@ -12,7 +12,6 @@ function SelectSingleList({ label, name, changeValue, tooltip, registry }) {
   useEffect(() => {
     let isMounted = true;
     const createOptions = (data) => {
-      console.log(data);
       return data.map((option) => ({
         value: lng === "fr" ? option?.fr_FR || option?.label?.fr_FR : option?.en_GB || option?.label?.en_GB,
         label: lng === "fr" ? option?.fr_FR || option?.label?.fr_FR : option?.en_GB || option?.label?.en_GB,
@@ -68,8 +67,8 @@ function SelectSingleList({ label, name, changeValue, tooltip, registry }) {
               name={name}
               //defaultValue={isEdit ? isEdit[name] : "Sélectionnez une valeur de la liste ou saisissez une nouvelle."}
               defaultValue={{
-                label: temp ? temp[name] : form[name] ? form[name] : "Sélectionnez une valeur de la liste ou saisissez une nouvelle.",
-                value: temp ? temp[name] : form[name] ? form[name] : "Sélectionnez une valeur de la liste ou saisissez une nouvelle.",
+                label: temp ? temp[name] : form[name] ? form[name]["fr_FR"] : "Sélectionnez une valeur de la liste ou saisissez une nouvelle.",
+                value: temp ? temp[name] : form[name] ? form[name]["fr_FR"] : "Sélectionnez une valeur de la liste ou saisissez une nouvelle.",
               }}
             />
           </div>
