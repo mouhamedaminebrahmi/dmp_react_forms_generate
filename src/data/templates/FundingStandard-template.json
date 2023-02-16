@@ -49,5 +49,6 @@
     }
   },
   "required": ["funder", "fundingStatus"],
-  "to_string": ["$.funder", " : ", "$.grantId"]
+  "to_string": ["$.funder.name", "$.funder.custom_value", " : ", "$.grantId"],
+  "to_string2": ["$.funder", " : ", "$.grantId"]
 }

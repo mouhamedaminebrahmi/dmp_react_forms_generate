@@ -38,6 +38,7 @@ function SelectFunder({ label, name, changeValue, registry, keyValue, level, too
       setrole(resRegistry.properties.role["const@fr_FR"]);
       setregisterFile(resRegistry.properties.person.template_name);
       const template = resRegistry.properties.person["template_name"];
+      setrole(resRegistry.properties.role["const@fr_FR"]);
       getSchema(template, "token").then((res) => {
         setregisterFile(res);
         if (!form[keyValue]) {
@@ -47,12 +48,10 @@ function SelectFunder({ label, name, changeValue, registry, keyValue, level, too
         if (!patern.length) {
           return;
         }
-        console.log(form[keyValue]);
-        setlist(form[keyValue].map((el) => parsePatern(el, patern)));
-        setselectedValue(parsePatern(form[keyValue][0], patern));
+        setselectedValue(parsePatern(form[keyValue].person, patern));
       });
     });
-  }, [form[keyValue], registry]);
+  }, [registry]);
 
   /**
    * It closes the modal and resets the state of the modal.
@@ -76,7 +75,7 @@ function SelectFunder({ label, name, changeValue, registry, keyValue, level, too
     setselectedValue(options[e.target.value].value);
     if (patern.length > 0) {
       changeValue({ target: { name, value: [object] } });
-      setform({ ...form, [keyValue]: [object] });
+      setform({ ...form, [keyValue]: { person: object, role: role } });
     } else {
       changeValue({ target: { name, value } });
     }
@@ -91,7 +90,8 @@ function SelectFunder({ label, name, changeValue, registry, keyValue, level, too
     //edit
     if (index !== null) {
       //const objectPerson = { person: temp, role: "from create" };
-      setform({ ...form, [keyValue]: [temp] });
+      setform({ ...form, [keyValue]: { person: temp, role: role } });
+      setselectedValue(parsePatern(temp, registerFile.to_string));
     } else {
       //save new
       handleSave();
@@ -107,7 +107,7 @@ function SelectFunder({ label, name, changeValue, registry, keyValue, level, too
    */
   const handleSave = () => {
     //const objectPerson = { person: temp, role: "from create" };
-    setform({ ...form, [keyValue]: [temp] });
+    setform({ ...form, [keyValue]: { person: temp, role: role } });
     handleClose();
     settemp(null);
     setselectedValue(parsePatern(temp, registerFile.to_string));
@@ -117,7 +117,7 @@ function SelectFunder({ label, name, changeValue, registry, keyValue, level, too
    * @param idx - the index of the item in the array
    */
   const handleEdit = (idx) => {
-    settemp(form[keyValue][idx]);
+    settemp(form[keyValue]["person"]);
     setShow(true);
     setindex(idx);
   };
@@ -135,7 +135,7 @@ function SelectFunder({ label, name, changeValue, registry, keyValue, level, too
           <div className="col-md-10">
             {options && (
               <select id="company" className="form-control" onChange={handleChangeList}>
-                {selectedValue && <option>Sélectionnez une valeur de la liste ou saisissez une nouvelle.</option>}
+                <option>Sélectionnez une valeur de la liste ou saisissez une nouvelle.</option>
                 {options.map((o, idx) => (
                   <option key={o.value} value={idx}>
                     {o.label}
@@ -149,7 +149,7 @@ function SelectFunder({ label, name, changeValue, registry, keyValue, level, too
             <i className="fas fa-plus-square text-primary icon-margin-top" onClick={handleShow}></i>
           </div>
         </div>
-        {form[keyValue] && (
+        {selectedValue && (
           <div style={{ margin: "10px" }}>
             <strong>Valeur sélectionnée :</strong> {selectedValue}
             <a href="#" onClick={() => handleEdit(0)}>
