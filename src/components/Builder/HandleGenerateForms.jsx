@@ -9,6 +9,7 @@ import SelectSingleList from "../Forms/SelectSingleList";
 import SelectWithCreate from "../Forms/SelectWithCreate";
 import listContributor from "../../data/contributor.json";
 import SelectFunder from "../Forms/SelectFunder";
+import TinyArea from "../Forms/TinyArea";
 
 function HandleGenerateForms({ shemaObject, level, lng, changeValue }) {
   const objectProp = shemaObject.properties;
@@ -27,7 +28,7 @@ function HandleGenerateForms({ shemaObject, level, lng, changeValue }) {
         // si inputType === textarea
 
         if (value.inputType === "textarea") {
-          data.push(<TextArea key={key} label={label} name={key} changeValue={changeValue} tooltip={tooltip}></TextArea>);
+          data.push(<TinyArea key={key} label={label} name={key} changeValue={changeValue} tooltip={tooltip}></TinyArea>);
           //sethtmlGenerator(data);
         }
         // Condition 1.2

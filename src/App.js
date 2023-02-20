@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import "./App.css";
 
@@ -19,7 +19,7 @@ function App() {
     //DataStorageStandard
     //ProjectStandard
     setLoading(true);
-    getSchema("ProjectStandard", "token")
+    getSchema("DataStorageStandard", "token")
       .then((el) => {
         setstandardTemplate(el);
       })
@@ -40,6 +40,13 @@ function App() {
     // } else {
     //   console.log(form);
     // }
+  };
+
+  const editorRef = useRef(null);
+  const log = () => {
+    if (editorRef.current) {
+      console.log(editorRef.current.getContent());
+    }
   };
 
   return (

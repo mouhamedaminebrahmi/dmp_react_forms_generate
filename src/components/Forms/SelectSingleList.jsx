@@ -44,7 +44,7 @@ function SelectSingleList({ label, name, changeValue, tooltip, registry }) {
     console.log(e.object?.fr_FR);
     console.log(e.object?.label?.fr_FR);
     const label = e.object?.fr_FR || e.object?.label?.fr_FR;
-    changeValue({ target: { name: name, value: e.object } });
+    changeValue({ target: { name: name, value: e.value } });
   };
 
   return (
@@ -63,8 +63,10 @@ function SelectSingleList({ label, name, changeValue, tooltip, registry }) {
               options={options}
               name={name}
               defaultValue={{
-                label: temp ? temp[name]?.label?.fr_FR : form[name] ? "form[name]" : "Sélectionnez une valeur de la liste ou saisissez une nouvelle.",
-                value: temp ? temp[name]?.label?.fr_FR : form[name] ? "form[name]" : "Sélectionnez une valeur de la liste ou saisissez une nouvelle.",
+                label: temp ? temp[name] : form[name] ? form[name] : "Sélectionnez une valeur de la liste ou saisissez une nouvelle.",
+                value: temp ? temp[name] : form[name] ? form[name] : "Sélectionnez une valeur de la liste ou saisissez une nouvelle.",
+                /*   label: temp ? temp[name]?.label?.fr_FR : form[name] ? "form[name]" : "Sélectionnez une valeur de la liste ou saisissez une nouvelle.",
+                value: temp ? temp[name]?.label?.fr_FR : form[name] ? "form[name]" : "Sélectionnez une valeur de la liste ou saisissez une nouvelle.", */
               }}
             />
           </div>
