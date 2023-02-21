@@ -78,7 +78,6 @@ function ModalTemplate({ value, template, keyValue, level, tooltip, header }) {
    * @param idx - the index of the item in the array
    */
   const handleEdit = (idx) => {
-    console.log(form[keyValue][idx]);
     settemp(form[keyValue][idx]);
     setShow(true);
     setindex(idx);
@@ -116,24 +115,6 @@ function ModalTemplate({ value, template, keyValue, level, tooltip, header }) {
             ?
           </span>
         )}
-        {/* <div style={{ margin: "20px 90px 20px 20px" }}>
-          {form[keyValue] && registerFile && header && <p>{header}</p>}
-          {form[keyValue] &&
-            registerFile &&
-            form[keyValue].map((el, idx) => (
-              <div key={idx} className="row border">
-                <div className="col-md-10">
-                  <div className="preview" dangerouslySetInnerHTML={createMarkup(parsePatern(el, registerFile.to_string))}></div>
-                </div>
-                <div className="col-md-1">
-                  {level === 1 && <i className="fa fa-edit m-3 text-primary" aria-hidden="true" onClick={() => handleEdit(idx)}></i>}
-                </div>
-                <div className="col-md-1">
-                  <i className="fa fa-times m-3  text-danger" aria-hidden="true" onClick={() => handleDeleteListe(idx)}></i>
-                </div>
-              </div>
-            ))}
-        </div> */}
 
         {form[keyValue] && registerFile && (
           <table style={{ marginTop: "20px" }} className="table table-bordered">
@@ -151,6 +132,7 @@ function ModalTemplate({ value, template, keyValue, level, tooltip, header }) {
                   <td scope="row">
                     <div className="preview" dangerouslySetInnerHTML={createMarkup(parsePatern(el, registerFile.to_string))}></div>
                   </td>
+
                   <td style={{ width: "10%" }}>
                     <div className="col-md-1">
                       {level === 1 && <i className="fa fa-edit m-3 text-primary" aria-hidden="true" onClick={() => handleEdit(idx)}></i>}

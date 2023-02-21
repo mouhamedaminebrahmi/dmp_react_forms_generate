@@ -1,19 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import BuilderForm from "../Builder/BuilderForm";
-import Select from "react-select";
-import { deleteByIndex, parsePatern } from "../../utils/GeneratorUtils";
+import { parsePatern } from "../../utils/GeneratorUtils";
 import { GlobalContext } from "../context/Global";
 import swal from "sweetalert";
 import toast from "react-hot-toast";
 import { getContributor, getSchema } from "../../services/DmpServiceApi";
 
 function SelectFunder({ label, name, changeValue, registry, keyValue, level, tooltip }) {
-  const [list, setlist] = useState([]);
-
   const [show, setShow] = useState(false);
   const [options, setoptions] = useState(null);
-  const [selectObject, setselectObject] = useState([]);
   const { form, setform, temp, settemp } = useContext(GlobalContext);
   const [index, setindex] = useState(null);
   const [registerFile, setregisterFile] = useState(null);

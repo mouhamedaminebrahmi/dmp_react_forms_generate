@@ -201,24 +201,6 @@ function SelectWithCreate({ label, registry, name, changeValue, template, keyVal
           </div>
         </div>
 
-        {/* <div style={{ margin: "20px 90px 20px 20px" }}>
-          {form[keyValue] && header && <p>{header}</p>}
-          {list &&
-            list.map((el, idx) => (
-              <div key={idx} className="row border">
-                <div className="col-md-10">
-                  <p className="border m-2"> {list[idx]} </p>
-                </div>
-                <div className="col-md-1">
-                  {level === 1 && <i className="fa fa-edit icon-margin-top text-primary" aria-hidden="true" onClick={() => handleEdit(idx)}></i>}
-                </div>
-                <div className="col-md-1">
-                  <i className="fa fa-times icon-margin-top text-danger" aria-hidden="true" onClick={() => handleDeleteListe(idx)}></i>
-                </div>
-              </div>
-            ))}
-        </div> */}
-
         {form[keyValue] && list && (
           <table style={{ marginTop: "20px" }} className="table table-bordered">
             <thead>

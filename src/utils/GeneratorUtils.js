@@ -125,3 +125,15 @@ export function getLabelName(value, object) {
 export function formatNumberWithSpaces(num) {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 }
+
+export function getDefaultLabel(temp, form, name) {
+  if (temp) {
+    if (typeof temp[name] === "object") {
+      return temp[name]?.label?.fr_FR;
+    } else if (typeof temp[name] === "string") {
+      return temp[name];
+    }
+  } else {
+    return form[name];
+  }
+}
