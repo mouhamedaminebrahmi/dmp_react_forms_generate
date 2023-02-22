@@ -2,7 +2,7 @@ import axios from "axios";
 
 // export async function getRegistry(t, token) {
 //   try {
-//     const response = await axios.get("https://api.publicapis.org/entries", {
+//     const response = await axios.get("https://jsonplaceholder.typicode.com/todos/1", {
 //       withCredentials: true,
 //       xsrfHeaderName: "X-XSRF-TOKEN",
 //       headers: {
@@ -18,8 +18,8 @@ import axios from "axios";
 
 export async function getSchema(t, token) {
   try {
-    const response = await axios.get("https://api.publicapis.org/entries");
-    return require(`../data/templates/${t}-template.json`);
+    const response = await axios.get("https://jsonplaceholder.typicode.com/todos/1");
+    return await require(`../data/templates/${t}-template.json`);
   } catch (error) {
     console.error(error);
   }
@@ -27,8 +27,8 @@ export async function getSchema(t, token) {
 
 export async function getRegistryValue(t, token) {
   try {
-    const response = await axios.get("https://api.publicapis.org/entries");
-    const result = require(`../data/templates/registry_values.json`);
+    const response = await axios.get("https://jsonplaceholder.typicode.com/todos/1");
+    const result = await require(`../data/templates/registry_values.json`);
     return result[t];
   } catch (error) {
     console.error(error);
@@ -37,8 +37,8 @@ export async function getRegistryValue(t, token) {
 
 export async function getRegistry(t, token) {
   try {
-    const response = await axios.get("https://api.publicapis.org/entries");
-    const result = require(`../data/registres/${t}.json`);
+    const response = await axios.get("https://jsonplaceholder.typicode.com/todos/1");
+    const result = await require(`../data/registres/${t}.json`);
     return result[t];
   } catch (error) {
     console.error(error);

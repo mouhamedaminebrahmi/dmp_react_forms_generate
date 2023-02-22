@@ -27,6 +27,7 @@
       "form_label@fr_FR": "Coûts liés au stockage et à la sauvegarde des données",
       "form_label@en_GB": "Data storage and backup associated costs"
     },
+
     "funding": {
       "type": "array",
       "table_header@fr_FR": "Financeur : identifiant du financement",
@@ -50,6 +51,27 @@
       "form_label@en_GB": "Indicate the funding of the project"
     },
 
+    "backupPolicy": {
+      "type": "array",
+      "table_header": null,
+      "items": {
+        "type": "object",
+        "class": "BackupPolicy",
+        "properties": {
+          "dbid": {
+            "type": "number"
+          }
+        },
+        "template_name": "BackupPolicyStandard",
+        "required": ["dbid"]
+      },
+      "description": "Informations relatives à la politique de sauvegarde",
+      "label@fr_FR": "Politique de sauvegarde",
+      "label@en_GB": "Backup policy",
+      "form_label@fr_FR": "Politique de sauvegarde",
+      "form_label@en_GB": "Backup policy"
+    },
+
     "principalInvestigator": {
       "type": "object",
       "class": "Contributor",
@@ -68,6 +90,29 @@
       "form_label@fr_FR": "Coordinateur du projet",
       "form_label@en_GB": "Project coordinator"
     },
+    "contributor": {
+      "type": "array",
+      "table_header@fr_FR": "Nom (rôle)",
+      "table_header@en_GB": "Name (role)",
+      "items": {
+        "type": "object",
+        "class": "Contributor",
+        "properties": {
+          "dbid": {
+            "type": "number"
+          }
+        },
+        "template_name": "DataStorageManager",
+        "required": ["dbid"]
+      },
+      "description": "Personne(s) responsable(s) du suivi du stockage des données",
+      "label@fr_FR": "Responsables du stockage des données",
+      "label@en_GB": "Persons in charge of storage",
+      "tooltip@fr_FR": "Le responsable peut être une personne, une équipe, un service",
+      "tooltip@en_GB": "Person in charge can be a person, a team, a department",
+      "form_label@fr_FR": "Responsables du stockage des données",
+      "form_label@en_GB": "Persons in charge of storage"
+    },
 
     "volumeUnit": {
       "type": "string",
@@ -80,6 +125,17 @@
       "form_label@fr_FR": "Unité",
       "form_label@en_GB": "Unit"
     },
+
+    "description": {
+      "type": "string",
+      "description": "Description des besoins de stockage",
+      "inputType": "textarea",
+      "label@fr_FR": "Besoins de stockage",
+      "label@en_GB": "Storage needs",
+      "form_label@fr_FR": "Décrire les besoins de stockage",
+      "form_label@en_GB": "Describe storage needs"
+    },
+
     "facility": {
       "type": "array",
       "table_header": null,
@@ -103,49 +159,33 @@
       "form_label@fr_FR": "Equipements, plateaux techniques utilisés pour le stockage et sauvegarde des données",
       "form_label@en_GB": "Equipments, technical platforms used for data storage and backup"
     },
-    "backupPolicy": {
-      "type": "array",
-      "table_header": null,
-      "items": {
-        "type": "object",
-        "class": "BackupPolicy",
-        "properties": {
-          "dbid": {
-            "type": "number"
-          }
-        },
-        "template_name": "BackupPolicyStandard",
-        "required": ["dbid"]
-      },
-      "description": "Informations relatives à la politique de sauvegarde",
-      "label@fr_FR": "Politique de sauvegarde",
-      "label@en_GB": "Backup policy",
-      "form_label@fr_FR": "Politique de sauvegarde",
-      "form_label@en_GB": "Backup policy"
-    },
 
-    "contributor": {
+    "storageType": {
       "type": "array",
-      "table_header@fr_FR": "Nom (rôle)",
-      "table_header@en_GB": "Name (role)",
       "items": {
-        "type": "object",
-        "class": "Contributor",
-        "properties": {
-          "dbid": {
-            "type": "number"
-          }
-        },
-        "template_name": "DataStorageManager",
-        "required": ["dbid"]
+        "type": "string"
       },
-      "description": "Personne(s) responsable(s) du suivi du stockage des données",
-      "label@fr_FR": "Responsables du stockage des données",
-      "label@en_GB": "Persons in charge of storage",
-      "tooltip@fr_FR": "Le responsable peut être une personne, une équipe, un service",
-      "tooltip@en_GB": "Person in charge can be a person, a team, a department",
-      "form_label@fr_FR": "Responsables du stockage des données",
-      "form_label@en_GB": "Persons in charge of storage"
+      "description": "Support de stockage des données",
+      "inputType": "dropdown",
+      "label@fr_FR": "Supports de stockage",
+      "label@en_GB": "Storage types",
+      "registry_name": "StorageType",
+      "overridable": true,
+      "form_label@fr_FR": "Supports de stockage",
+      "form_label@en_GB": "Storage types"
+    },
+    "uncontrolledKeywords": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Mots clés libres",
+      "label@fr_FR": "Mots clés (texte libre)",
+      "label@en_GB": "Keywords (free-text)",
+      "tooltip@fr_FR": "Un mot clé par ligne. Cliquer sur + pour ajouter un mot-clé. Eviter les acronymes et les mots clés trop génériques",
+      "tooltip@en_GB": "One key word per line. Click on + to add a key word. Avoid acronyms and overly generic keywords",
+      "form_label@fr_FR": "Mots clés (texte libre)",
+      "form_label@en_GB": "Uncontrolled keyword(s) (free-text)"
     }
   },
   "required": ["description"],
