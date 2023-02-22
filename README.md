@@ -48,7 +48,13 @@ import { Toaster } from "react-hot-toast";
 - Add fontAwesome to index.html
 
 ```sh
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.2.0/css/all.min.css"
+      integrity="sha512-6c4nX2tn5KbzeBJo9Ywpa0Gkt+mzCzJBrE1RB6fmpcsoN+b/w/euwIMuQKNyUoU/nToKN3a8SgNOtPrbW12fug=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
 ```
 
 - Delete app.test.js
@@ -59,10 +65,12 @@ dynamic form generation uses a number of open source projects to work properly:
 
 - [react-bootstrap](https://react-bootstrap.github.io/) - React-Bootstrap replaces the Bootstrap JavaScript. Each component has been built from scratch as a true React component, without unneeded dependencies like jQuery!
 - [dompurify](https://github.com/cure53/DOMPurify) - DOMPurify is a DOM-only, super-fast, uber-tolerant XSS sanitizer for HTML, MathML and SVG.
-- [draft-js](https://github.com/facebookarchive/draft-js) - Draft.js is a JavaScript rich text editor framework, built for React and backed by an immutable model. Extensible and Customizable.
+- [TinyMCE](https://www.tiny.cloud/docs/integrations/react/) - TinyMCE is a rich text editor extensible and Customizable.
 - [react-hot-toast](https://react-hot-toast.com/) - Add beautiful notifications to your React app with react-hot-toast. Lightweight. Smoking hot by default.
 - [react-select](https://react-select.com/home) - A flexible and beautiful Select Input control for ReactJS with multiselect, autocomplete, async and creatable support.
 - [sweetalert](https://sweetalert2.github.io/) - A BEAUTIFUL, RESPONSIVE, CUSTOMIZABLE, ACCESSIBLE (WAI-ARIA) REPLACEMENT FOR JAVASCRIPT'S POPUP BOXES
+- [react-loader-spinner](https://www.npmjs.com/package/react-loader-spinner) - React-spinner-loader provides simple React SVG spinner component which can be implemented for async await operation before data loads to the view.
+- [axios](https://github.com/axios/axios) - Promise based HTTP client for the browser and node.js.
 
 ## Installation
 
@@ -72,8 +80,10 @@ Install the dependencies .
 
 ```sh
 npm i react-select draft-js react-draft-wysiwyg draftjs-to-html html-to-draftjs
-npm i react-bootstrap bootstrap dompurify
-npm i react-hot-toast sweetalert
+npm i bootstrap@3.3.0
+npm i react-bootstrap@0.33.1
+npm i react-hot-toast sweetalert react-loader-spinner dompurify axios
+npm install --save @tinymce/tinymce-react
 ```
 
 For developement testing environment...
@@ -116,6 +126,14 @@ npx serve -s build
 #### Unit test
 
 For developement:
+
+> Note: `package.json` add this line to scripts.
+
+```sh
+"test": "react-scripts test --transformIgnorePatterns 'node_modules/(?!my-library-dir)/'",
+```
+
+run tests:
 
 ```sh
 npm run test
