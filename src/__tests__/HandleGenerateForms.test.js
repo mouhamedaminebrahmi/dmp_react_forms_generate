@@ -236,7 +236,7 @@ describe("HandleGenerateForms component", () => {
     expect(wrapper.find("SelectSingleList").prop("name")).toBe("volumeUnit");
 
     //text area
-    expect(wrapper.find("TextArea").prop("label")).toBe("Décrire les besoins de stockage");
+    expect(screen.getByText("Décrire les besoins de stockage")).toBeInTheDocument();
 
     //facility (select with create)
     expect(wrapper.find("SelectWithCreate").prop("label")).toBe(

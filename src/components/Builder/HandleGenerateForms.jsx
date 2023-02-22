@@ -28,7 +28,7 @@ function HandleGenerateForms({ shemaObject, level, lng, changeValue }) {
         // si inputType === textarea
 
         if (value.inputType === "textarea") {
-          data.push(<TextArea key={key} label={label} name={key} changeValue={changeValue} tooltip={tooltip}></TextArea>);
+          data.push(<TinyArea level={level} key={key} label={label} name={key} changeValue={changeValue} tooltip={tooltip}></TinyArea>);
           //sethtmlGenerator(data);
         }
         // Condition 1.2

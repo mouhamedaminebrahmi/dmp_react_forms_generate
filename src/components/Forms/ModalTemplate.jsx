@@ -70,6 +70,7 @@ function ModalTemplate({ value, template, keyValue, level, tooltip, header }) {
    * @param isOpen - boolean
    */
   const handleShow = (isOpen) => {
+    console.log(form);
     setShow(isOpen);
   };
 
