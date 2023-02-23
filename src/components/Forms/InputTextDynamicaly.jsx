@@ -48,12 +48,12 @@ function InputTextDynamicaly({ label, name, tooltip }) {
 
       {formFields.map((form, index) => {
         return (
-          <div key={index}>
+          <div key={index} style={{ margin: "10px" }}>
             <div className="row">
-              <div className="col-9 mt-2">
+              <div className="col-md-9">
                 <input className="form-control" name={name} onChange={(event) => handleFormChange(event, index)} value={form.name} />
               </div>
-              <div className="col-3">
+              <div className="col-md-3">
                 <button type="button" className="btn btn-primary px-3 m-2" onClick={addFields}>
                   <i className="fa fa-plus" aria-hidden="true" />
                 </button>
