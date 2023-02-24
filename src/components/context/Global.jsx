@@ -27,6 +27,7 @@ export const GlobalContext = createContext();
 function Global({ children }) {
   const [form, setform] = useReducer(reducer, localState || {});
   const [temp, settemp] = useState(null);
+  const [context, setContext] = useState({ context: "research_project" });
   const [lng, setlng] = useState("fr");
 
   useEffect(() => {
@@ -34,7 +35,7 @@ function Global({ children }) {
     localStorage.setItem("form", JSON.stringify(form));
   }, [form]);
 
-  return <GlobalContext.Provider value={{ form, setform, temp, settemp, lng, setlng }}>{children}</GlobalContext.Provider>;
+  return <GlobalContext.Provider value={{ form, setform, temp, settemp, lng, setlng, context, setContext }}>{children}</GlobalContext.Provider>;
 }
 
 export default Global;

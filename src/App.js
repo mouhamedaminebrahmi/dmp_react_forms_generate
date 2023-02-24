@@ -8,6 +8,7 @@ import { GlobalContext } from "./components/context/Global";
 import { checkRequiredForm } from "./utils/GeneratorUtils";
 import { getSchema } from "./services/DmpServiceApi";
 import CustumSpinner from "./components/Shared/CustumSpinner";
+import Main from "./components/plans/Main";
 
 function App() {
   const { form } = useContext(GlobalContext);
@@ -51,20 +52,11 @@ function App() {
 
   return (
     <>
-      {loading && <CustumSpinner></CustumSpinner>}
+      {/* {loading && <CustumSpinner></CustumSpinner>}
       {!loading && error && <p>error</p>}
       {!loading && !error && standardTemplate && (
         <>
-          <div className="row">
-            {/* <div className="col-md-2 mt-2">
-          <button className="btn btn-primary button-margin" onClick={() => setlng("fr")}>
-            fr
-          </button>
-          <button className="btn btn-primary button-margin" onClick={() => setlng("en")}>
-            en
-          </button>
-        </div> */}
-          </div>
+          <div className="row"></div>
           <div className="m-4">
             <BuilderForm shemaObject={standardTemplate} level={1}></BuilderForm>
           </div>
@@ -72,7 +64,8 @@ function App() {
             Enregistrer
           </button>
         </>
-      )}
+      )} */}
+      <Main></Main>
     </>
   );
 }

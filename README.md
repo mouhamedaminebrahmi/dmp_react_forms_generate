@@ -79,10 +79,9 @@ Dynamic form generation requires [Node.js](https://nodejs.org/) v10+ to run.
 Install the dependencies .
 
 ```sh
-npm i react-select draft-js react-draft-wysiwyg draftjs-to-html html-to-draftjs
 npm i bootstrap@3.3.0
 npm i react-bootstrap@0.33.1
-npm i react-hot-toast sweetalert react-loader-spinner dompurify axios
+npm i react-hot-toast sweetalert react-loader-spinner dompurify axios react-select
 npm install --save @tinymce/tinymce-react
 ```
 
