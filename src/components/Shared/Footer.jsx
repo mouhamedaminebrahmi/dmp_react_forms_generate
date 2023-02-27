@@ -4,7 +4,7 @@ function Footer() {
   return (
     <footer className="footer">
       <div className="row">
-        <div className="col-3 first-row">
+        <div className="col-md-3 first-row">
           <div className="mb-2">
             <img className="logo-gris" src="/assets/images/8.png" alt="image" />
             <p className="description">
@@ -16,7 +16,7 @@ function Footer() {
             </div>
           </div>
         </div>
-        <div className="col-3">
+        <div className="col-md-3">
           <div>
             <h6 className="title">NAVIGATION</h6>
             <ul className="list-footer">
@@ -27,7 +27,7 @@ function Footer() {
             </ul>
           </div>
         </div>
-        <div className="col-3">
+        <div className="col-md-3">
           <div>
             <h6 className="title">A PROPOS</h6>
             <ul className="list-footer">
@@ -38,14 +38,18 @@ function Footer() {
             </ul>
           </div>
         </div>
-        <div className="col-3">
+        <div className="col-md-3">
           <div>
             <h6 className="title">ECOSYSTEM</h6>
             <ul className="list-footer">
-              <li className="item-footer">product 1</li>
-              <li className="item-footer">product 2</li>
-              <li className="item-footer">product 4</li>
-              <li className="item-footer">product 5</li>
+              <li className="item-footer">
+                <img src="/assets/images/9.png" alt="" className="logo-gris" />
+              </li>
+              <li className="item-footer">recherche.data.gouv.fr</li>
+              <li className="item-footer"></li>
+              <li className="item-footer">
+                <img src="/assets/images/inist.png" alt="" className="logo-gris" />
+              </li>
             </ul>
           </div>
         </div>

@@ -17,8 +17,10 @@ function FirstStep({ handleNextStep }) {
     <div className="container-card">
       <div className="row">
         <div className="row circle-content">
-          <div className="circle">1</div>
-          <span className="circle-text">Indiquez le contexte de votre DMP</span>
+          <div className="rom">
+            <div className="col-md-4 circle">1</div>
+            <div className="circle-text col-md-8 ">Indiquez le contexte de votre DMP</div>
+          </div>
         </div>
       </div>
       <div className="column">
@@ -31,7 +33,7 @@ function FirstStep({ handleNextStep }) {
             defaultChecked={true}
             onClick={() => handleCheck("research_project")}
           />
-          <label className="form-check-label" htmlFor="flexRadioDefault1">
+          <label className="form-check-label label-title" htmlFor="flexRadioDefault1">
             Projet de recherche
           </label>
           <div className="list-context">
@@ -47,7 +49,7 @@ function FirstStep({ handleNextStep }) {
             id="flexRadioDefault2"
             onClick={() => handleCheck("research_structure")}
           />
-          <label className="form-check-label" htmlFor="flexRadioDefault2">
+          <label className="form-check-label label-title" htmlFor="flexRadioDefault2">
             Structure de recherche
           </label>
           <div className="list-context">

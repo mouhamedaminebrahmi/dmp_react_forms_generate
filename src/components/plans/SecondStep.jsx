@@ -14,6 +14,11 @@ function SecondStep({ handleNextStep }) {
   const [isShowFunder, setisShowFunder] = useState(false);
   const [funders, setFunders] = useState(null);
   const [organismes, setorganismes] = useState(null);
+  const [valueOtherOrganisme, setvalueOtherOrganisme] = useState("Commencez à taper pour voir une liste de suggestions");
+  const [valueFunder, setvalueFunder] = useState("Commencez à taper pour voir une liste de suggestions");
+
+  const [isShowOtherOrganisme, setisShowOtherOrganisme] = useState(false);
+  const [isShowListFunder, setisShowListFunder] = useState(false);
 
   useEffect(() => {
     getOrganisme().then((res) => {
@@ -51,20 +56,31 @@ function SecondStep({ handleNextStep }) {
   }, []);
 
   const handleCheckOption = (val) => {
-    console.log(val);
-    if (val === "1") {
-      setisShowListOrganizme(false);
-      setisShowOrganizme(false);
-    } else if (val === "2") {
-      setisShowListOrganizme(true);
-      setisShowOrganizme(false);
-    } else if (val === "3") {
-      setisShowListOrganizme(false);
-      setisShowOrganizme(false);
-      setorganismes(null);
-    } else {
-      setisShowListOrganizme(false);
-      setisShowOrganizme(false);
+    switch (val) {
+      case "1":
+        setisShowListOrganizme(false);
+        setisShowOrganizme(false);
+        break;
+      case "2":
+        setisShowListOrganizme(true);
+        setisShowOrganizme(false);
+        break;
+      case "3":
+        setisShowListOrganizme(false);
+        setisShowOrganizme(false);
+        setorganismes(null);
+        setisShowFunder(false);
+        setvalueFunder("Commencez à taper pour voir une liste de suggestions");
+        setisShowOtherOrganisme(true);
+        setisShowListFunder(false);
+        break;
+      default:
+        setisShowListOrganizme(false);
+        setisShowOrganizme(false);
+        setvalueOtherOrganisme("Commencez à taper pour voir une liste de suggestions");
+        setisShowListFunder(true);
+        setisShowOtherOrganisme(false);
+        break;
     }
   };
 
@@ -72,6 +88,7 @@ function SecondStep({ handleNextStep }) {
     getOtherOrganismeById("", e.object, context).then((res) => {
       setorganismes(res.data.templates);
       setisShowOrganizme(true);
+      setvalueOtherOrganisme(e.label);
     });
   };
 
@@ -80,6 +97,7 @@ function SecondStep({ handleNextStep }) {
       console.log(res);
       setFunders(res.data.templates);
       setisShowFunder(true);
+      setvalueFunder(e.label);
     });
   };
 
@@ -87,8 +105,10 @@ function SecondStep({ handleNextStep }) {
     <div className="container-card">
       <div className="row">
         <div className="row circle-content">
-          <div className="circle">2</div>
-          <span className="circle-text">Choisissez votre modèle</span>
+          <div className="rom">
+            <div className="col-md-4 circle">2</div>
+            <div className="circle-text col-md-8 ">Choisissez votre modèle</div>
+          </div>
         </div>
       </div>
       <div className="column">
@@ -101,14 +121,14 @@ function SecondStep({ handleNextStep }) {
             defaultChecked
             onClick={() => handleCheckOption("1")}
           />
-          <label className="form-check-label" htmlFor="flexRadioDefault1">
+          <label className="form-check-label label-title" htmlFor="flexRadioDefault1">
             Modèle par défaut
           </label>
           <div className="list-context">{defaultModel && defaultModel?.title}</div>
         </div>
         <div className="form-check">
           <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" onClick={() => handleCheckOption("2")} />
-          <label className="form-check-label" htmlFor="flexRadioDefault2">
+          <label className="form-check-label label-title" htmlFor="flexRadioDefault2">
             INRAE (votre organisme)
           </label>
 
@@ -116,7 +136,7 @@ function SecondStep({ handleNextStep }) {
             {isShowListOrganizme &&
               listOrganisme &&
               listOrganisme.map((el) => (
-                <label className="element-organisme">
+                <label className="element-organisme label-sous-title">
                   <input type="radio" id={el.id} name="contact" />
                   {/* <label htmlFor={el.id}>{el.title}</label> */}
                   <div className="list-element">{el.title}</div>
@@ -126,16 +146,25 @@ function SecondStep({ handleNextStep }) {
         </div>
         <div className="form-check">
           <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3" onClick={() => handleCheckOption("3")} />
-          <label className="form-check-label" htmlFor="flexRadioDefault3">
+          <label className="form-check-label label-title" htmlFor="flexRadioDefault3">
             Autre organisme
           </label>
           <div>
-            {otherOrganisme && <Select options={otherOrganisme} onChange={handleChangeOtherOrganisme} />}
+            {isShowOtherOrganisme && otherOrganisme && (
+              <Select
+                options={otherOrganisme}
+                onChange={handleChangeOtherOrganisme}
+                value={{
+                  label: valueOtherOrganisme,
+                  value: valueOtherOrganisme,
+                }}
+              />
+            )}
             <div className="list-organisme">
               {isShowOrganizme &&
                 organismes &&
                 organismes.map((el) => (
-                  <label className="element-organisme">
+                  <label className="element-organisme label-sous-title">
                     <input type="radio" id={el.id} name="contact" />
                     {/* <label htmlFor={el.id}>{el.title}</label> */}
                     <div className="list-element">{el.title}</div>
@@ -146,16 +175,25 @@ function SecondStep({ handleNextStep }) {
         </div>
         <div className="form-check">
           <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault4" onClick={() => handleCheckOption("4")} />
-          <label className="form-check-label" htmlFor="flexRadioDefault4">
+          <label className="form-check-label label-title" htmlFor="flexRadioDefault4">
             Financeur
           </label>
           <div>
-            {listFunder && <Select options={listFunder} onChange={handleChangeFunder} />}
+            {isShowListFunder && listFunder && (
+              <Select
+                options={listFunder}
+                onChange={handleChangeFunder}
+                value={{
+                  label: valueFunder,
+                  value: valueFunder,
+                }}
+              />
+            )}
             <div className="list-organisme">
               {isShowFunder &&
                 funders &&
                 funders.map((el) => (
-                  <label className="element-organisme">
+                  <label className="element-organisme label-sous-title">
                     <input type="radio" id={el.id} name="contact" />
                     {/* <label htmlFor={el.id}>{el.title}</label> */}
                     <div className="list-element">{el.title}</div>
