@@ -18,7 +18,12 @@ function Main() {
     <>
       <Header></Header>
       <Banner></Banner>
+
       <div className="main">
+        <div className="banner-info">
+          <i className="fas fa-info-circle info-icon"></i>
+          <span className="banner-span">Message à l’attention de l’utilisateur l’informant de la manipulation faite.</span>
+        </div>
         <div className="card-articles">
           {firstStep && <FirstStep handleNextStep={handleNextStep}></FirstStep>}
           {secondStep && <SecondStep handleNextStep={handleNextStep}></SecondStep>}

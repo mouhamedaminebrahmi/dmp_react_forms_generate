@@ -34,7 +34,10 @@ function Footer() {
               <li className="item-footer">A propos de DMP OPIDoR</li>
               <li className="item-footer">Mentions légales</li>
               <li className="item-footer">Politique de cookies</li>
-              <li className="item-footer">Github</li>
+              <li className="item-footer">
+                Github
+                <img className="icon-footer" src="/assets/images/github.png" alt="" />
+              </li>
             </ul>
           </div>
         </div>
@@ -45,10 +48,16 @@ function Footer() {
               <li className="item-footer">
                 <img src="/assets/images/9.png" alt="" className="logo-gris" />
               </li>
-              <li className="item-footer">recherche.data.gouv.fr</li>
+              <li className="item-footer">
+                <img src="/assets/images/republique.png" className="logo-republique" alt="" />
+                recherche.data.gouv.fr
+              </li>
               <li className="item-footer"></li>
               <li className="item-footer">
-                <img src="/assets/images/inist.png" alt="" className="logo-gris" />
+                <img className="icon-footer" src="/assets/images/twitter.png" alt="" />
+                <img className="icon-footer" src="/assets/images/messages.png" alt="" />
+                <img src="/assets/images/cnrs.png" alt="" className="logo-cnrs" />
+                <img src="/assets/images/roadmap.png" alt="" className="logo-road" />
               </li>
             </ul>
           </div>

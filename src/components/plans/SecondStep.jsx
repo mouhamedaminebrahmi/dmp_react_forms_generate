@@ -60,6 +60,19 @@ function SecondStep({ handleNextStep }) {
       case "1":
         setisShowListOrganizme(false);
         setisShowOrganizme(false);
+
+        //condition 3
+        setorganismes(null);
+        setisShowFunder(false);
+        setvalueFunder("Commencez à taper pour voir une liste de suggestions");
+        setisShowOtherOrganisme(true);
+        setisShowListFunder(false);
+
+        //condition 4
+        setvalueOtherOrganisme("Commencez à taper pour voir une liste de suggestions");
+        setisShowListFunder(false);
+        setisShowOtherOrganisme(false);
+
         break;
       case "2":
         setisShowListOrganizme(true);
