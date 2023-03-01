@@ -29,7 +29,7 @@ function Main() {
         </div>
         <div className="card-articles">
           {firstStep && <FirstStep handleNextStep={handleNextStep}></FirstStep>}
-          {secondStep && <SecondStep handleNextStep={handleNextStep}></SecondStep>}
+          {secondStep && <SecondStep></SecondStep>}
         </div>
       </div>
       <Footer></Footer>

@@ -1,16 +1,17 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { GlobalContext } from "../context/Global";
 
 function FirstStep({ handleNextStep }) {
-  const { context, setContext } = useContext(GlobalContext);
+  const { setContext } = useContext(GlobalContext);
 
+  /**
+   * When the checkbox is checked, the value of the checkbox is passed to the handleCheck
+   * function, which then sets the context state to the value of the
+   * checkbox.
+   */
   const handleCheck = (val) => {
     console.log(val);
     setContext({ context: val });
-  };
-
-  const handleShowContext = () => {
-    console.log(context);
   };
 
   return (
