@@ -23,6 +23,7 @@ function Footer() {
               <li className="item-footer">Aide en ligne</li>
               <li className="item-footer">PGD &amp; Modèles</li>
               <li className="item-footer">Approfondir</li>
+              <li className="item-footer">Support technique / FAQ</li>
               <li className="item-footer">Actualités</li>
             </ul>
           </div>
@@ -32,7 +33,7 @@ function Footer() {
             <h6 className="title">A PROPOS</h6>
             <ul className="list-footer">
               <li className="item-footer">A propos de DMP OPIDoR</li>
-              <li className="item-footer">Mentions légales</li>
+              <li className="item-footer">Conditions Générales d’Utilisation</li>
               <li className="item-footer">Politique de cookies</li>
               <li className="item-footer">
                 Github

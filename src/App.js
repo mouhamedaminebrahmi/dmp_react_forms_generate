@@ -55,7 +55,7 @@ function App() {
       {/* {loading && <CustumSpinner></CustumSpinner>}
       {!loading && error && <p>error</p>}
       {!loading && !error && standardTemplate && (
-        <>
+        <div style={{ margin: "15px" }}>
           <div className="row"></div>
           <div className="m-4">
             <BuilderForm shemaObject={standardTemplate} level={1}></BuilderForm>
@@ -63,7 +63,7 @@ function App() {
           <button onClick={handleSaveForm} className="btn btn-primary m-4">
             Enregistrer
           </button>
-        </>
+        </div>
       )} */}
       <Main></Main>
     </>

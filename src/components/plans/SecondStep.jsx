@@ -162,7 +162,7 @@ function SecondStep({ handleNextStep }) {
           <label className="form-check-label label-title" htmlFor="flexRadioDefault3">
             Autre organisme
           </label>
-          <div>
+          <div className="select">
             {isShowOtherOrganisme && otherOrganisme && (
               <Select
                 options={otherOrganisme}

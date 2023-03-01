@@ -9,6 +9,10 @@ function Main() {
   const [firstStep, setfirstStep] = useState(true);
   const [secondStep, setsecondStep] = useState(false);
 
+  /**
+   * When the user clicks the button, the first step is set to false and the second step
+   * is set to true.
+   */
   const handleNextStep = () => {
     setfirstStep(!firstStep);
     setsecondStep(!secondStep);
@@ -18,7 +22,6 @@ function Main() {
     <>
       <Header></Header>
       <Banner></Banner>
-
       <div className="main">
         <div className="banner-info">
           <i className="fas fa-info-circle info-icon"></i>

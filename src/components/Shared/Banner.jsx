@@ -15,7 +15,7 @@ function Banner() {
               <img src="/assets/images/inrae.png" alt="" />
               <div className="banner-details">
                 <div>
-                  <i class="fas fa-envelope"></i>
+                  <i className="fas fa-envelope"></i>
                   <span className="banner-span">Contact</span>
                 </div>
 
